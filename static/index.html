@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metro Bilbao - Route Planner</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚇 Metro Bilbao Route Planner</h1>
+            <p class="subtitle">Real-time metro information and route planning</p>
+            <div id="nightModeIndicator" class="night-indicator"></div>
+        </header>
+
+        <main>
+            <section class="search-section">
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <label for="origin">Origin Station</label>
+                        <input 
+                            type="text" 
+                            id="origin" 
+                            placeholder="e.g., ETX (Etxebarri)"
+                            autocomplete="off"
+                        >
+                        <div id="originSuggestions" class="suggestions"></div>
+                    </div>
+
+                    <div class="swap-button-wrapper">
+                        <button id="swapButton" class="swap-btn" title="Swap stations">⇄</button>
+                    </div>
+
+                    <div class="input-wrapper">
+                        <label for="destination">Destination Station</label>
+                        <input 
+                            type="text" 
+                            id="destination" 
+                            placeholder="e.g., ARZ (Ariz)"
+                            autocomplete="off"
+                        >
+                        <div id="destinationSuggestions" class="suggestions"></div>
+                    </div>
+                </div>
+
+                <button id="searchButton" class="search-btn">Find Route</button>
+            </section>
+
+            <section id="loadingSection" class="loading hidden">
+                <div class="spinner"></div>
+                <p>Fetching route information...</p>
+            </section>
+
+            <section id="errorSection" class="error-section hidden">
+                <div class="error-message">
+                    <span class="error-icon">⚠️</span>
+                    <span id="errorText"></span>
+                </div>
+            </section>
+
+            <section id="resultsSection" class="results-section hidden">
+                <!-- Trip Overview -->
+                <div class="card trip-card">
+                    <h2>🚇 Trip Overview</h2>
+                    <div id="tripInfo"></div>
+                </div>
+
+                <!-- Upcoming Trains -->
+                <div class="card trains-card">
+                    <h2>📊 Upcoming Trains</h2>
+                    <div id="trainsInfo"></div>
+                </div>
+
+                <!-- Transfer Information (if applicable) -->
+                <div id="transferCard" class="card transfer-card hidden">
+                    <h2>🔄 Transfer Required</h2>
+                    <div id="transferInfo"></div>
+                </div>
+
+                <!-- Station Exits -->
+                <div class="card exits-card">
+                    <h2>🚪 Station Exits</h2>
+                    <div class="exits-container">
+                        <div class="exits-column">
+                            <h3>📍 Origin Station</h3>
+                            <div id="originExits"></div>
+                        </div>
+                        <div class="exits-column">
+                            <h3>📍 Destination Station</h3>
+                            <div id="destinationExits"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Environmental Impact -->
+                <div class="card co2-card">
+                    <h2>🌱 Environmental Impact</h2>
+                    <div id="co2Info"></div>
+                </div>
+
+                <!-- Messages (if any) -->
+                <div id="messagesCard" class="card messages-card hidden">
+                    <h2>⚠️ Important Messages</h2>
+                    <div id="messagesInfo"></div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Data provided by <a href="https://www.metrobilbao.eus/" target="_blank">Metro Bilbao</a></p>
+            <p>Made with ❤️ for friends</p>
+        </footer>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
