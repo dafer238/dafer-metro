@@ -57,7 +57,8 @@ class MetroClient:
 
         for exit_info in exits:
             # Exit is available if it's not nighttime OR if it's a nocturnal exit
-            exit_info["available"] = not is_night or exit_info.get("nocturnal", False)
+            # Explicitly convert to bool to ensure proper JSON serialization
+            exit_info["available"] = bool(not is_night or exit_info.get("nocturnal", False))
 
         return exits
 
