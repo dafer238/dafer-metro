@@ -460,9 +460,10 @@ function displayTransferInfo(transferOptions) {
                 <div class="step-number">1</div>
                 <div class="step-content">
                     <div class="step-route">
-                        ${option.firstLeg.from} → ${option.firstLeg.to}
+                        ${option.firstLeg.fromName || option.firstLeg.from} → ${option.firstLeg.toName || option.firstLeg.to}
                     </div>
                     <div class="step-info">
+                        <span style="opacity: 0.7; font-size: 0.85em;">${option.firstLeg.from} → ${option.firstLeg.to}</span> • 
                         Line ${option.firstLeg.line} • ${option.firstLeg.duration} minutes
                     </div>
                 </div>
@@ -471,8 +472,11 @@ function displayTransferInfo(transferOptions) {
             <div class="transfer-step">
                 <div class="step-number">⏱️</div>
                 <div class="step-content">
-                    <div class="step-route">Transfer Wait</div>
-                    <div class="step-info">Approximately ${option.transferWait} minutes</div>
+                    <div class="step-route">Transfer Wait at ${option.secondLeg.fromName || option.secondLeg.from}</div>
+                    <div class="step-info">
+                        <span style="opacity: 0.7; font-size: 0.85em;">${option.secondLeg.from}</span> • 
+                        ${option.transferWait} minutes
+                    </div>
                 </div>
             </div>
             
@@ -480,9 +484,10 @@ function displayTransferInfo(transferOptions) {
                 <div class="step-number">2</div>
                 <div class="step-content">
                     <div class="step-route">
-                        ${option.secondLeg.from} → ${option.secondLeg.to}
+                        ${option.secondLeg.fromName || option.secondLeg.from} → ${option.secondLeg.toName || option.secondLeg.to}
                     </div>
                     <div class="step-info">
+                        <span style="opacity: 0.7; font-size: 0.85em;">${option.secondLeg.from} → ${option.secondLeg.to}</span> • 
                         Line ${option.secondLeg.line} • ${option.secondLeg.duration} minutes
                     </div>
                 </div>
