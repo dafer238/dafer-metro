@@ -4,6 +4,7 @@ let trainTimers = [];
 let lastFetchTime = null;
 let autoRefreshInterval = null;
 let refreshIntervalSeconds = 10; // Default, will be updated from API
+let metroBilbaoApiUrl = 'https://api.metrobilbao.eus/metro/real-time'; // Default, will be updated from API
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', async () => {
@@ -39,6 +40,11 @@ async function updateNightMode() {
         // Update refresh interval from API
         if (data.autoRefreshInterval) {
             refreshIntervalSeconds = data.autoRefreshInterval;
+        }
+        
+        // Update Metro Bilbao API URL from config
+        if (data.apiBaseUrl) {
+            metroBilbaoApiUrl = data.apiBaseUrl;
         }
         
         const indicator = document.getElementById('nightModeIndicator');
@@ -201,7 +207,8 @@ async function handleSearch() {
     showLoading();
     
     try {
-        const response = await fetch(`/api/route/${origin}/${destination}`);
+        // Call Metro Bilbao API directly from client to avoid rate limiting on server IP
+        const response = await fetch(`${metroBilbaoApiUrl}/${origin}/${destination}`);
         
         if (!response.ok) {
             throw new Error('Failed to fetch route information');
@@ -432,7 +439,8 @@ function clearTrainTimers() {
 
 async function refreshTrainData(origin, destination) {
     try {
-        const response = await fetch(`/api/route/${origin}/${destination}`);
+        // Call Metro Bilbao API directly from client to avoid rate limiting on server IP
+        const response = await fetch(`${metroBilbaoApiUrl}/${origin}/${destination}`);
         
         if (!response.ok) {
             return;
