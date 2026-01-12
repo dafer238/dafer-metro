@@ -3,8 +3,8 @@ Description=Metro Bilbao FastAPI Service
 After=network.target
 
 [Service]
-User=www-data
-Group=www-data
+User=dafer
+Group=dafer
 WorkingDirectory=/home/dafer/code/python/dafer-metro
 ExecStart=/home/dafer/code/python/venvs/denv/bin/python -m uvicorn main:app --host 0.0.0.0 --port 8001
 Restart=always
