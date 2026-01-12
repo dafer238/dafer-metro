@@ -154,7 +154,7 @@ async def get_stations():
         "SOP": "Sopela",
         "LAR": "Larrabasterra",
         "BER": "Berango",
-        "IBR": "Ibarbengoa",
+        "IBB": "Ibarbengoa",
         "BID": "Bidezabal",
         "ALG": "Algorta",
         "AIB": "Aiboa",
