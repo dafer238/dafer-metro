@@ -431,7 +431,7 @@ function startTrainCountdown() {
                 
                 // Add blinking classes based on time remaining
                 const trainItem = element.closest('.train-item');
-                if (seconds < 15) {
+                if (seconds < 30) {
                     trainItem.classList.add('blink-red');
                     trainItem.classList.remove('blink-yellow');
                 } else if (seconds < 60) {
