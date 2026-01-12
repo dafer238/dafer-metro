@@ -209,14 +209,14 @@ function addExitAvailability(data) {
     if (data.exits && data.exits.origin) {
         data.exits.origin.forEach(exit => {
             // Exit is available if it's not nighttime OR if it's a nocturnal exit
-            exit.available = !isNight || exit.nocturnal || false;
+            exit.available = !isNight || (exit.nocturnal === true);
         });
     }
     
     if (data.exits && data.exits.destiny) {
         data.exits.destiny.forEach(exit => {
             // Exit is available if it's not nighttime OR if it's a nocturnal exit
-            exit.available = !isNight || exit.nocturnal || false;
+            exit.available = !isNight || (exit.nocturnal === true);
         });
     }
 }
