@@ -143,7 +143,41 @@ async def process_route_data(request: ProcessRouteRequest):
         Processed route information with exit availability and calculations
     """
     try:
+        from datetime import datetime, timedelta
+
         route_data = request.data
+
+        # Add expected arrival times to each train
+        trip_duration_sec = route_data.get("trip", {}).get("duration", 0) * 60
+
+        for train in route_data.get("trains", []):
+            estimated_min = train.get("estimated", 0)
+            total_time_sec = estimated_min * 60 + trip_duration_sec
+            arrival_time = datetime.now() + timedelta(seconds=total_time_sec)
+            train["arrivalAtDestination"] = arrival_time.strftime("%H:%M:%S")
+            train["totalTimeToDestination"] = route_planner._format_duration(total_time_sec)
+
+        # Calculate earliest arrival time
+        if route_data.get("trains") and len(route_data["trains"]) > 0:
+            first_train = route_data["trains"][0]
+            route_data["earliestArrival"] = first_train.get("arrivalAtDestination", "")[
+                :5
+            ]  # HH:MM format
+
+        # Check if transfer is required and calculate options
+        if route_data.get("trip", {}).get("transfer"):
+            origin = route_data["trip"]["fromStation"]["code"]
+            destination = route_data["trip"]["toStation"]["code"]
+            transfer_options = await route_planner._find_transfer_options(
+                origin, destination, route_data
+            )
+            route_data["transferOptions"] = transfer_options
+
+            # Update earliest arrival if transfer is faster
+            if transfer_options and len(transfer_options) > 0:
+                transfer_arrival = transfer_options[0].get("expectedArrival")
+                if transfer_arrival:
+                    route_data["earliestArrival"] = transfer_arrival
 
         # Add exit availability based on current time
         if "exits" in route_data:
@@ -155,20 +189,6 @@ async def process_route_data(request: ProcessRouteRequest):
                 route_data["exits"]["destiny"] = metro_client.filter_available_exits(
                     route_data["exits"]["destiny"]
                 )
-
-        # Calculate earliest arrival if we have trains and trip duration
-        if route_data.get("trains") and route_data.get("trip", {}).get("duration"):
-            from datetime import datetime
-
-            first_train_time = route_data["trains"][0]["time"]
-            trip_duration = route_data["trip"]["duration"]
-
-            # Parse the train time and add duration
-            train_dt = datetime.fromisoformat(first_train_time.replace("Z", "+00:00"))
-            from datetime import timedelta
-
-            arrival_dt = train_dt + timedelta(minutes=trip_duration)
-            route_data["earliestArrival"] = arrival_dt.strftime("%H:%M")
 
         # Add formatted information
         route_data["formatted"] = metro_client.format_complete_info(route_data)
