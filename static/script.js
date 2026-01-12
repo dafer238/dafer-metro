@@ -14,6 +14,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Check night mode
     await updateNightMode();
     
+    // Load visitor count
+    await updateVisitorCount();
+    
     // Setup event listeners
     setupEventListeners();
     
@@ -29,6 +32,24 @@ async function loadStations() {
     } catch (error) {
         console.error('Error loading stations:', error);
         stationsCache = {};
+    }
+}
+
+async function updateVisitorCount() {
+    try {
+        const response = await fetch('/api/visitors');
+        const data = await response.json();
+        const counter = document.getElementById('visitorCounter');
+        if (counter && data.count !== undefined) {
+            const plural = data.count === 1 ? 'visitor' : 'visitors';
+            counter.textContent = `👥 ${data.count} unique ${plural} today!`;
+        }
+    } catch (error) {
+        console.error('Error loading visitor count:', error);
+        const counter = document.getElementById('visitorCounter');
+        if (counter) {
+            counter.textContent = '';
+        }
     }
 }
 

@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, JSONResponse
@@ -6,6 +6,8 @@ from pydantic import BaseModel
 from route_planner import RoutePlanner
 from metro_client import MetroClient
 import os
+from datetime import datetime
+from collections import defaultdict
 
 
 app = FastAPI(
@@ -27,6 +29,9 @@ app.add_middleware(
 route_planner = RoutePlanner()
 metro_client = MetroClient()
 
+# Visitor tracking
+visitor_data = {"date": datetime.now().date(), "visitors": set(), "count": 0}
+
 
 class RouteRequest(BaseModel):
     """Request model for route queries"""
@@ -41,9 +46,39 @@ class ProcessRouteRequest(BaseModel):
     data: dict
 
 
+def track_visitor(request: Request):
+    """Track unique visitors by IP and user agent"""
+    global visitor_data
+
+    # Reset counter if it's a new day
+    current_date = datetime.now().date()
+    if visitor_data["date"] != current_date:
+        visitor_data["date"] = current_date
+        visitor_data["visitors"] = set()
+        visitor_data["count"] = 0
+
+    # Create unique identifier from IP and user agent
+    client_ip = request.client.host if request.client else "unknown"
+    user_agent = request.headers.get("user-agent", "")
+    visitor_id = f"{client_ip}:{user_agent}"
+
+    # Add to set if new visitor
+    if visitor_id not in visitor_data["visitors"]:
+        visitor_data["visitors"].add(visitor_id)
+        visitor_data["count"] = len(visitor_data["visitors"])
+
+
+@app.get("/api/visitors")
+async def get_visitor_count(request: Request):
+    """Get current visitor count and track this visitor"""
+    track_visitor(request)
+    return {"count": visitor_data["count"]}
+
+
 @app.get("/")
-async def root():
+async def root(request: Request):
     """Serve the main HTML page"""
+    track_visitor(request)
     html_path = os.path.join(os.path.dirname(__file__), "static", "index.html")
 
     if os.path.exists(html_path):

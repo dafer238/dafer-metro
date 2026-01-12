@@ -61,7 +61,7 @@ header h1 {
 .night-indicator {
     position: absolute;
     top: 8px;
-        right: 8px;
+    right: 8px;
         padding: 3px 8px;
     background: rgba(255, 255, 255, 0.2);
     border-radius: 20px;
@@ -69,6 +69,18 @@ header h1 {
     backdrop-filter: blur(10px);
 }
 
+.visitor-counter {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    padding: 3px 10px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
 main {
     padding: 8px;
 }
