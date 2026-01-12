@@ -172,7 +172,7 @@ async def get_stations():
         "SAM": "Santimami/San Mamés",
         "IND": "Indautxu",
         "MOY": "Moyua",
-        "ABN": "Abando",
+        "ABA": "Abando",
         "CAD": "Zazpikaleak/Casco Viejo",
         "BOL": "Bolueta",
         "ETX": "Etxebarri",
