@@ -169,7 +169,7 @@ async def get_stations():
         "SIN": "San Inazio",
         "SAR": "Sarriko",
         "DEU": "Deustu",
-        "SMM": "Santimami/San Mamés",
+        "SAM": "Santimami/San Mamés",
         "IND": "Indautxu",
         "MOY": "Moyua",
         "ABN": "Abando",
