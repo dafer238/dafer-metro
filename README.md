@@ -1,3 +1,28 @@
+
+## 🚀 Deploy as a systemd Service (Debian/Orange Pi)
+
+1. Copy the service file:
+   ```bash
+   sudo cp metro-bilbao.service /etc/systemd/system/
+   ```
+2. Reload systemd:
+   ```bash
+   sudo systemctl daemon-reload
+   ```
+3. Enable and start the service:
+   ```bash
+   sudo systemctl enable --now metro-bilbao
+   ```
+4. Check status:
+   ```bash
+   sudo systemctl status metro-bilbao
+   ```
+
+The app will be available on port 8001 (http://<your-orange-pi-ip>:8001)
+
+**Note:**
+For production, running uvicorn directly is suitable for small/low-traffic deployments. For higher reliability, use a process manager (systemd, as above) and consider a reverse proxy (nginx) for HTTPS, load balancing, and advanced features. For heavy production use, consider running with Gunicorn + Uvicorn workers.
+
 # Metro Bilbao Route Planner 🚇
 
 A modern web application for planning routes on Metro Bilbao with real-time information, transfer planning, and station exit availability.
