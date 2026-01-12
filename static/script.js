@@ -184,43 +184,6 @@ function handleSwap() {
     destinationInput.value = temp;
 }
 
-function isNighttime() {
-    const now = new Date();
-    const hours = now.getHours();
-    const minutes = now.getMinutes();
-    const currentTime = hours * 60 + minutes;
-    
-    // Night time is 22:00 to 06:00 (from config)
-    const nightStart = 22 * 60; // 23:00
-    const nightEnd = 6 * 60;    // 06:00
-    
-    // Handle case where night period crosses midnight
-    if (nightStart > nightEnd) {
-        return currentTime >= nightStart || currentTime < nightEnd;
-    } else {
-        return currentTime >= nightStart && currentTime < nightEnd;
-    }
-}
-
-function addExitAvailability(data) {
-    // Add availability status to all exits based on current time
-    const isNight = isNighttime();
-    
-    if (data.exits && data.exits.origin) {
-        data.exits.origin.forEach(exit => {
-            // Exit is available if it's not nighttime OR if it's a nocturnal exit
-            exit.available = !isNight || (exit.nocturnal === true);
-        });
-    }
-    
-    if (data.exits && data.exits.destiny) {
-        data.exits.destiny.forEach(exit => {
-            // Exit is available if it's not nighttime OR if it's a nocturnal exit
-            exit.available = !isNight || (exit.nocturnal === true);
-        });
-    }
-}
-
 async function handleSearch() {
     const origin = document.getElementById('origin').value.trim().toUpperCase();
     const destination = document.getElementById('destination').value.trim().toUpperCase();
@@ -244,16 +207,31 @@ async function handleSearch() {
     showLoading();
     
     try {
-        // Call Metro Bilbao API directly from client to avoid rate limiting on server IP
-        const response = await fetch(`${metroBilbaoApiUrl}/${origin}/${destination}`);
+        // Step 1: Call Metro Bilbao API directly from client to avoid rate limiting on server IP
+        const metroBilbaoResponse = await fetch(`${metroBilbaoApiUrl}/${origin}/${destination}`);
         
-        if (!response.ok) {
-            throw new Error('Failed to fetch route information');
+        if (!metroBilbaoResponse.ok) {
+            throw new Error('Failed to fetch route information from Metro Bilbao');
         }
         
-        const data = await response.json();
+        const rawData = await metroBilbaoResponse.json();
         
-        displayResults(data);
+        // Step 2: Send raw data to our backend for processing (exit availability, calculations, etc.)
+        const processResponse = await fetch('/api/process', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ data: rawData })
+        });
+        
+        if (!processResponse.ok) {
+            throw new Error('Failed to process route data');
+        }
+        
+        const processedData = await processResponse.json();
+        
+        displayResults(processedData);
         
     } catch (error) {
         console.error('Error fetching route:', error);
@@ -287,9 +265,6 @@ function hideResults() {
 function displayResults(data) {
     // Clear any existing timers
     clearTrainTimers();
-    
-    // Add exit availability based on current time (if not already added)
-    addExitAvailability(data);
     
     // Store data for access by other functions
     window.currentRouteData = data;
@@ -341,6 +316,8 @@ function displayResults(data) {
 
 function displayTripInfo(trip) {
     const data = window.currentRouteData || {};
+    
+    // Use earliestArrival from backend if available
     const earliestArrivalHtml = data.earliestArrival ? `<div class="label" style="margin-top: 8px; color: var(--primary-color);">Earliest Arrival</div>
                 <div class="value" style="color: var(--primary-color); font-weight: 600;">${data.earliestArrival}</div>` : '';
     
@@ -387,6 +364,8 @@ function displayTrains(trains) {
     
     lastFetchTime = Date.now();
     const now = new Date();
+    const routeData = window.currentRouteData || {};
+    const tripDuration = routeData.trip ? routeData.trip.duration : 0;
     
     const html = `
         <div class="train-list">
@@ -397,6 +376,13 @@ function displayTrains(trains) {
                 const totalSeconds = Math.max(0, Math.round((arrivalTime - now) / 1000));
                 // Format the arrival time with seconds
                 const timeWithSeconds = arrivalTime.toLocaleTimeString('en-GB', {hour: '2-digit', minute: '2-digit', second: '2-digit'});
+                
+                // Calculate arrival at destination
+                let arrivalAtDestStr = '';
+                if (tripDuration > 0) {
+                    const arrivalAtDest = new Date(arrivalTime.getTime() + tripDuration * 60000);
+                    arrivalAtDestStr = arrivalAtDest.toLocaleTimeString('en-GB', {hour: '2-digit', minute: '2-digit'});
+                }
                 
                 return `
                 <div class="train-item" data-arrival-time="${arrivalTime.getTime()}" data-time-display="${timeWithSeconds}">
@@ -411,7 +397,7 @@ function displayTrains(trains) {
                             ${formatTime(totalSeconds)}
                         </div>
                         <div class="train-details train-arrival-time">${timeWithSeconds}</div>
-                        ${train.arrivalAtDestination ? '<div class="train-details" style="color: var(--primary-color); font-weight: 500;">Arrival: ' + train.arrivalAtDestination + '</div>' : ''}
+                        ${arrivalAtDestStr ? '<div class="train-details" style="color: var(--primary-color); font-weight: 500;">Arrival: ' + arrivalAtDestStr + '</div>' : ''}
                     </div>
                 </div>
             `}).join('')}

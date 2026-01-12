@@ -35,6 +35,12 @@ class RouteRequest(BaseModel):
     destination: str
 
 
+class ProcessRouteRequest(BaseModel):
+    """Request model for processing raw Metro API data"""
+
+    data: dict
+
+
 @app.get("/")
 async def root():
     """Serve the main HTML page"""
@@ -123,6 +129,53 @@ async def post_route(request: RouteRequest):
         return JSONResponse(content=route_data)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching route: {str(e)}")
+
+
+@app.post("/api/process")
+async def process_route_data(request: ProcessRouteRequest):
+    """
+    Process raw Metro API data (add exit availability, calculations, etc.)
+
+    Args:
+        request: ProcessRouteRequest with raw Metro API data
+
+    Returns:
+        Processed route information with exit availability and calculations
+    """
+    try:
+        route_data = request.data
+
+        # Add exit availability based on current time
+        if "exits" in route_data:
+            if "origin" in route_data["exits"]:
+                route_data["exits"]["origin"] = metro_client.filter_available_exits(
+                    route_data["exits"]["origin"]
+                )
+            if "destiny" in route_data["exits"]:
+                route_data["exits"]["destiny"] = metro_client.filter_available_exits(
+                    route_data["exits"]["destiny"]
+                )
+
+        # Calculate earliest arrival if we have trains and trip duration
+        if route_data.get("trains") and route_data.get("trip", {}).get("duration"):
+            from datetime import datetime
+
+            first_train_time = route_data["trains"][0]["time"]
+            trip_duration = route_data["trip"]["duration"]
+
+            # Parse the train time and add duration
+            train_dt = datetime.fromisoformat(first_train_time.replace("Z", "+00:00"))
+            from datetime import timedelta
+
+            arrival_dt = train_dt + timedelta(minutes=trip_duration)
+            route_data["earliestArrival"] = arrival_dt.strftime("%H:%M")
+
+        # Add formatted information
+        route_data["formatted"] = metro_client.format_complete_info(route_data)
+
+        return JSONResponse(content=route_data)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error processing route data: {str(e)}")
 
 
 @app.get("/api/health")
