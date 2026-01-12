@@ -1,4 +1,4 @@
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 from datetime import datetime, time
 import httpx
 from config import get_settings
