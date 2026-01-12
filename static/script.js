@@ -190,8 +190,8 @@ function isNighttime() {
     const minutes = now.getMinutes();
     const currentTime = hours * 60 + minutes;
     
-    // Night time is 23:00 to 06:00 (from config)
-    const nightStart = 23 * 60; // 23:00
+    // Night time is 22:00 to 06:00 (from config)
+    const nightStart = 22 * 60; // 23:00
     const nightEnd = 6 * 60;    // 06:00
     
     // Handle case where night period crosses midnight
@@ -253,9 +253,6 @@ async function handleSearch() {
         
         const data = await response.json();
         
-        // Add exit availability based on current time
-        addExitAvailability(data);
-        
         displayResults(data);
         
     } catch (error) {
@@ -290,6 +287,9 @@ function hideResults() {
 function displayResults(data) {
     // Clear any existing timers
     clearTrainTimers();
+    
+    // Add exit availability based on current time (if not already added)
+    addExitAvailability(data);
     
     // Store data for access by other functions
     window.currentRouteData = data;
