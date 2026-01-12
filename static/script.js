@@ -184,6 +184,43 @@ function handleSwap() {
     destinationInput.value = temp;
 }
 
+function isNighttime() {
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const currentTime = hours * 60 + minutes;
+    
+    // Night time is 23:00 to 06:00 (from config)
+    const nightStart = 23 * 60; // 23:00
+    const nightEnd = 6 * 60;    // 06:00
+    
+    // Handle case where night period crosses midnight
+    if (nightStart > nightEnd) {
+        return currentTime >= nightStart || currentTime < nightEnd;
+    } else {
+        return currentTime >= nightStart && currentTime < nightEnd;
+    }
+}
+
+function addExitAvailability(data) {
+    // Add availability status to all exits based on current time
+    const isNight = isNighttime();
+    
+    if (data.exits && data.exits.origin) {
+        data.exits.origin.forEach(exit => {
+            // Exit is available if it's not nighttime OR if it's a nocturnal exit
+            exit.available = !isNight || exit.nocturnal || false;
+        });
+    }
+    
+    if (data.exits && data.exits.destiny) {
+        data.exits.destiny.forEach(exit => {
+            // Exit is available if it's not nighttime OR if it's a nocturnal exit
+            exit.available = !isNight || exit.nocturnal || false;
+        });
+    }
+}
+
 async function handleSearch() {
     const origin = document.getElementById('origin').value.trim().toUpperCase();
     const destination = document.getElementById('destination').value.trim().toUpperCase();
@@ -215,6 +252,10 @@ async function handleSearch() {
         }
         
         const data = await response.json();
+        
+        // Add exit availability based on current time
+        addExitAvailability(data);
+        
         displayResults(data);
         
     } catch (error) {
@@ -529,9 +570,14 @@ function displayExits(exits) {
         ? exits.origin.map(exit => `
             <div class="exit-item ${exit.available ? 'available' : 'closed'}">
                 <div class="exit-status">
-                    ${exit.available ? '✅ OPEN' : '🔒 CLOSED'}
+                    ${exit.available ? '✅ OPEN' : '⚠️ Might be closed'}
                 </div>
                 <div class="exit-name">${exit.name}</div>
+                ${exit.issues && exit.issues.length > 0 ? `
+                    <div class="exit-issues">
+                        ${exit.issues.map(issue => `<div class="issue-item">⚠️ ${issue}</div>`).join('')}
+                    </div>
+                ` : ''}
                 <div class="exit-features">
                     <span class="feature-badge">
                         ${exit.elevator ? '♿ Elevator' : '🚶 Stairs'}
@@ -549,9 +595,14 @@ function displayExits(exits) {
         ? exits.destiny.map(exit => `
             <div class="exit-item ${exit.available ? 'available' : 'closed'}">
                 <div class="exit-status">
-                    ${exit.available ? '✅ OPEN' : '🔒 CLOSED'}
+                    ${exit.available ? '✅ OPEN' : '⚠️ Might be closed'}
                 </div>
                 <div class="exit-name">${exit.name}</div>
+                ${exit.issues && exit.issues.length > 0 ? `
+                    <div class="exit-issues">
+                        ${exit.issues.map(issue => `<div class="issue-item">⚠️ ${issue}</div>`).join('')}
+                    </div>
+                ` : ''}
                 <div class="exit-features">
                     <span class="feature-badge">
                         ${exit.elevator ? '♿ Elevator' : '🚶 Stairs'}
