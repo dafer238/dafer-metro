@@ -2,13 +2,18 @@
 Description=Metro Bilbao FastAPI Service
 After=network.target
 
+
 [Service]
+Type=simple
 User=dafer
-Group=dafer
 WorkingDirectory=/home/dafer/code/python/dafer-metro
-ExecStart=/home/dafer/code/python/venvs/denv/bin/python -m uvicorn main:app --host 0.0.0.0 --port 8001
+ExecStart=/bin/bash -c 'source /home/dafer/code/python/venvs/denv/bin/activate && uvicorn main:app --host 0.0.0.0 --port 8001'
 Restart=always
-RestartSec=3
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=metro-bilbao
 
 [Install]
 WantedBy=multi-user.target
