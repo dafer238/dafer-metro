@@ -243,6 +243,9 @@ function displayResults(data) {
     // Clear any existing timers
     clearTrainTimers();
     
+    // Store data for access by other functions
+    window.currentRouteData = data;
+    
     // Display trip info
     displayTripInfo(data.trip);
     
@@ -289,6 +292,10 @@ function displayResults(data) {
 }
 
 function displayTripInfo(trip) {
+    const data = window.currentRouteData || {};
+    const earliestArrivalHtml = data.earliestArrival ? `<div class="label" style="margin-top: 8px; color: var(--primary-color);">Earliest Arrival</div>
+                <div class="value" style="color: var(--primary-color); font-weight: 600;">${data.earliestArrival}</div>` : '';
+    
     const html = `
         <div class="trip-info-grid">
             <div class="trip-info-item">
@@ -304,6 +311,7 @@ function displayTripInfo(trip) {
             <div class="trip-info-item">
                 <div class="label">Duration</div>
                 <div class="value">${trip.duration} minutes</div>
+                ${earliestArrivalHtml}
             </div>
             <div class="trip-info-item">
                 <div class="label">Line</div>
@@ -347,7 +355,7 @@ function displayTrains(trains) {
                     <div>
                         <div class="train-direction">🚇 ${train.direction}</div>
                         <div class="train-details">
-                            ${train.wagons} wagons
+                            ${train.wagons} wagons${train.totalTimeToDestination ? ' • ' + train.totalTimeToDestination + ' to destination' : ''}
                         </div>
                     </div>
                     <div style="text-align: right;">
@@ -355,6 +363,7 @@ function displayTrains(trains) {
                             ${formatTime(totalSeconds)}
                         </div>
                         <div class="train-details train-arrival-time">${timeWithSeconds}</div>
+                        ${train.arrivalAtDestination ? '<div class="train-details" style="color: var(--primary-color); font-weight: 500;">Arrival: ' + train.arrivalAtDestination + '</div>' : ''}
                     </div>
                 </div>
             `}).join('')}
@@ -464,7 +473,8 @@ function displayTransferInfo(transferOptions) {
                     </div>
                     <div class="step-info">
                         <span style="opacity: 0.7; font-size: 0.85em;">${option.firstLeg.from} → ${option.firstLeg.to}</span> • 
-                        Line ${option.firstLeg.line} • ${option.firstLeg.duration} minutes
+                        Line ${option.firstLeg.line} • ${option.firstLeg.durationFormatted || option.firstLeg.duration + ' min'}
+                        ${option.firstLeg.arrivalTime ? '<br><span style="opacity: 0.8;">Arrives at transfer: ' + option.firstLeg.arrivalTime + '</span>' : ''}
                     </div>
                 </div>
             </div>
@@ -475,7 +485,8 @@ function displayTransferInfo(transferOptions) {
                     <div class="step-route">Transfer Wait at ${option.secondLeg.fromName || option.secondLeg.from}</div>
                     <div class="step-info">
                         <span style="opacity: 0.7; font-size: 0.85em;">${option.secondLeg.from}</span> • 
-                        ${option.transferWait} minutes
+                        ${option.transferWaitFormatted || option.transferWait + ' min'}
+                        ${option.secondLeg.departureTime ? '<br><span style="opacity: 0.8;">Next train departs: ' + option.secondLeg.departureTime + '</span>' : ''}
                     </div>
                 </div>
             </div>
@@ -488,13 +499,14 @@ function displayTransferInfo(transferOptions) {
                     </div>
                     <div class="step-info">
                         <span style="opacity: 0.7; font-size: 0.85em;">${option.secondLeg.from} → ${option.secondLeg.to}</span> • 
-                        Line ${option.secondLeg.line} • ${option.secondLeg.duration} minutes
+                        Line ${option.secondLeg.line} • ${option.secondLeg.durationFormatted || option.secondLeg.duration + ' min'}
                     </div>
                 </div>
             </div>
             
             <div style="text-align: center; padding: 16px; background: var(--light-color); border-radius: 8px; font-weight: 600;">
-                Total Journey Time: ${option.totalDuration} minutes
+                Total Journey Time: ${option.totalDurationFormatted || option.totalDuration + ' min'}
+                ${option.expectedArrival ? '<br><span style="font-size: 0.95em; color: var(--primary-color); margin-top: 8px; display: block;">Arrival at destination: ' + option.expectedArrival + '</span>' : ''}
             </div>
         </div>
     `).join('');

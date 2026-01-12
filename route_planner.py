@@ -127,6 +127,30 @@ class RoutePlanner:
     def __init__(self):
         self.metro_client = MetroClient()
 
+    @staticmethod
+    def _format_time(total_seconds: float) -> str:
+        """Format seconds as MM:SS"""
+        mins = int(total_seconds // 60)
+        secs = int(total_seconds % 60)
+        return f"{mins:02d}:{secs:02d}"
+
+    @staticmethod
+    def _format_duration(total_seconds: float) -> str:
+        """Format duration in minutes (e.g., '13 minutes')"""
+        mins = int(total_seconds // 60)
+        secs = int(total_seconds % 60)
+        if secs > 0:
+            return f"{mins} min {secs} sec"
+        return f"{mins} minutes"
+
+    @staticmethod
+    def _calculate_arrival_time(departure_seconds: float) -> str:
+        """Calculate expected arrival time from now"""
+        from datetime import datetime, timedelta
+
+        arrival = datetime.now() + timedelta(seconds=departure_seconds)
+        return arrival.strftime("%H:%M:%S")
+
     def _find_transfer_station(self, origin: str, destination: str) -> Optional[str]:
         """
         Find the optimal transfer station between origin and destination
@@ -182,11 +206,34 @@ class RoutePlanner:
         # Fetch data from API
         route_data = await self.metro_client.get_route_info(origin, destination)
 
+        # Add expected arrival times to each train
+        from datetime import datetime, timedelta
+
+        trip_duration_sec = route_data["trip"].get("duration", 0) * 60
+
+        for train in route_data.get("trains", []):
+            estimated_min = train.get("estimated", 0)
+            total_time_sec = estimated_min * 60 + trip_duration_sec
+            arrival_time = datetime.now() + timedelta(seconds=total_time_sec)
+            train["arrivalAtDestination"] = arrival_time.strftime("%H:%M:%S")
+            train["totalTimeToDestination"] = self._format_duration(total_time_sec)
+
+        # Calculate earliest arrival time
+        if route_data.get("trains") and len(route_data["trains"]) > 0:
+            first_train = route_data["trains"][0]
+            route_data["earliestArrival"] = first_train.get("arrivalAtDestination")
+
         # Check if transfer is required
         if route_data["trip"]["transfer"]:
             # Find transfer options
             transfer_options = await self._find_transfer_options(origin, destination, route_data)
             route_data["transferOptions"] = transfer_options
+
+            # Update earliest arrival if transfer is faster
+            if transfer_options and len(transfer_options) > 0:
+                transfer_arrival = transfer_options[0].get("expectedArrival")
+                if transfer_arrival:
+                    route_data["earliestArrival"] = transfer_arrival
 
         # Add formatted information
         route_data["formatted"] = self.metro_client.format_complete_info(route_data)
@@ -229,28 +276,31 @@ class RoutePlanner:
                 # Fallback if we can't determine transfer station
                 transfer_station = "Unknown"
 
-            # Calculate timing for first leg
-            first_leg_duration = route_data["trip"].get("duration", 0) // 2
+            # Calculate timing for first leg (convert to seconds)
+            first_leg_duration_sec = (route_data["trip"].get("duration", 0) // 2) * 60
 
-            # Get the next train departure time from origin
-            first_train_departure = 0
+            # Get the next train departure time from origin (convert to seconds)
+            first_train_departure_sec = 0
             if route_data.get("trains") and len(route_data["trains"]) > 0:
-                first_train_departure = route_data["trains"][0].get("estimated", 0)
+                first_train_departure_sec = route_data["trains"][0].get("estimated", 0) * 60
 
             # Calculate arrival time at transfer station
-            arrival_at_transfer = first_train_departure + first_leg_duration
+            arrival_at_transfer_sec = first_train_departure_sec + first_leg_duration_sec
 
             # Get second line information
             second_line = route_data["trip"].get("secondLine", route_data["trip"]["line"])
 
             # Fetch train times from transfer station to destination
-            transfer_wait = 5  # Default fallback
-            second_leg_duration = route_data["trip"].get("duration", 0) - first_leg_duration
+            # Minimum 30 seconds transfer time (time to walk between platforms)
+            transfer_wait_sec = 30  # Default fallback
+            second_leg_duration_sec = (
+                route_data["trip"].get("duration", 0) - (first_leg_duration_sec // 60)
+            ) * 60
 
             try:
                 # Get train schedule from transfer station to destination
                 print(f"DEBUG: Fetching trains from {transfer_station} to {destination}")
-                print(f"DEBUG: Arrival at transfer: {arrival_at_transfer} minutes")
+                print(f"DEBUG: Arrival at transfer: {arrival_at_transfer_sec / 60:.2f} minutes")
 
                 transfer_route = await self.metro_client.get_route_info(
                     transfer_station, destination
@@ -261,37 +311,43 @@ class RoutePlanner:
                         f"DEBUG: Found {len(transfer_route['trains'])} trains from transfer station"
                     )
                     # Find the first train that departs after we arrive at transfer station
+                    arrival_at_transfer_min = arrival_at_transfer_sec / 60
                     for train in transfer_route["trains"]:
                         train_departure_time = train.get("estimated", 0)
                         print(
-                            f"DEBUG: Train departs in {train_departure_time} min (arrival={arrival_at_transfer})"
+                            f"DEBUG: Train departs in {train_departure_time} min (arrival={arrival_at_transfer_min:.2f} min)"
                         )
 
-                        # If this train departs after or when we arrive, use it
-                        if train_departure_time >= arrival_at_transfer:
-                            transfer_wait = train_departure_time - arrival_at_transfer
+                        # If this train departs after we arrive, use it
+                        # Add minimum 30 seconds for platform transfer
+                        if train_departure_time * 60 >= arrival_at_transfer_sec:
+                            transfer_wait_sec = max(
+                                30, train_departure_time * 60 - arrival_at_transfer_sec
+                            )
                             print(
-                                f"DEBUG: Found matching train! Wait time: {transfer_wait} minutes"
+                                f"DEBUG: Found matching train! Wait time: {transfer_wait_sec / 60:.2f} minutes"
                             )
                             break
                     else:
                         # If no train found departing after arrival, use the first train's time as minimum wait
                         if transfer_route["trains"]:
-                            transfer_wait = max(5, transfer_route["trains"][0].get("estimated", 5))
+                            transfer_wait_sec = max(
+                                30, transfer_route["trains"][0].get("estimated", 5) * 60
+                            )
                             print(
-                                f"DEBUG: No train after arrival, using first train wait: {transfer_wait}"
+                                f"DEBUG: No train after arrival, using first train wait: {transfer_wait_sec / 60:.2f} min"
                             )
 
                     # Use actual duration from transfer to destination
-                    second_leg_duration = transfer_route["trip"].get(
-                        "duration", second_leg_duration
+                    second_leg_duration_sec = (
+                        transfer_route["trip"].get("duration", second_leg_duration_sec // 60) * 60
                     )
             except Exception as e:
                 # If API call fails, fall back to estimated times
                 print(f"Could not fetch transfer train times: {e}")
-                transfer_wait = 5  # Assume 5 minutes wait time at transfer
+                transfer_wait_sec = 30  # Minimum 30 seconds wait time at transfer
 
-            total_time = first_leg_duration + transfer_wait + second_leg_duration
+            total_time_sec = first_leg_duration_sec + transfer_wait_sec + second_leg_duration_sec
 
             # Get station names
             transfer_station_name = STATION_NAMES.get(transfer_station, transfer_station)
@@ -309,22 +365,37 @@ class RoutePlanner:
                     "fromName": origin_name,
                     "to": transfer_station,
                     "toName": transfer_station_name,
-                    "duration": first_leg_duration,
+                    "duration": first_leg_duration_sec,
+                    "durationFormatted": self._format_duration(first_leg_duration_sec),
                     "line": route_data["trip"]["line"],
-                    "departure": first_train_departure,
-                    "arrival": arrival_at_transfer,
+                    "departure": first_train_departure_sec,
+                    "departureFormatted": self._format_time(first_train_departure_sec),
+                    "departureTime": self._calculate_arrival_time(first_train_departure_sec),
+                    "arrival": arrival_at_transfer_sec,
+                    "arrivalFormatted": self._format_time(arrival_at_transfer_sec),
+                    "arrivalTime": self._calculate_arrival_time(arrival_at_transfer_sec),
                 },
-                "transferWait": transfer_wait,
+                "transferWait": transfer_wait_sec,
+                "transferWaitFormatted": self._format_duration(transfer_wait_sec),
                 "secondLeg": {
                     "from": transfer_station,
                     "fromName": transfer_station_name,
                     "to": destination,
                     "toName": destination_name,
-                    "duration": second_leg_duration,
+                    "duration": second_leg_duration_sec,
+                    "durationFormatted": self._format_duration(second_leg_duration_sec),
                     "line": second_line,
-                    "departure": arrival_at_transfer + transfer_wait,
+                    "departure": arrival_at_transfer_sec + transfer_wait_sec,
+                    "departureFormatted": self._format_time(
+                        arrival_at_transfer_sec + transfer_wait_sec
+                    ),
+                    "departureTime": self._calculate_arrival_time(
+                        arrival_at_transfer_sec + transfer_wait_sec
+                    ),
                 },
-                "totalDuration": total_time,
+                "totalDuration": total_time_sec,
+                "totalDurationFormatted": self._format_duration(total_time_sec),
+                "expectedArrival": self._calculate_arrival_time(total_time_sec),
             }
 
             transfer_options.append(option)
@@ -368,27 +439,36 @@ class RoutePlanner:
             lines.append(f"\nOption {i}:")
             lines.append(f"  1️⃣ {option['firstLeg']['from']} → {option['firstLeg']['to']}")
             lines.append(
-                f"     Line: {option['firstLeg']['line']}, Duration: {option['firstLeg']['duration']} min"
+                f"     Line: {option['firstLeg']['line']}, Duration: {option['firstLeg'].get('durationFormatted', str(option['firstLeg']['duration']) + ' min')}"
             )
 
             # Show detailed transfer timing
             first_leg = option["firstLeg"]
             if "departure" in first_leg and "arrival" in first_leg:
-                lines.append(
-                    f"     Depart: +{first_leg['departure']} min, Arrive: +{first_leg['arrival']} min"
+                depart_fmt = first_leg.get(
+                    "departureFormatted", str(first_leg["departure"]) + " min"
                 )
+                arrival_fmt = first_leg.get("arrivalFormatted", str(first_leg["arrival"]) + " min")
+                lines.append(f"     Depart: +{depart_fmt}, Arrive: +{arrival_fmt}")
 
-            lines.append(f"  ⏱️  Transfer wait: {option['transferWait']} minutes")
+            wait_fmt = option.get("transferWaitFormatted", str(option["transferWait"]) + " minutes")
+            lines.append(f"  ⏱️  Transfer wait: {wait_fmt}")
 
             lines.append(f"  2️⃣ {option['secondLeg']['from']} → {option['secondLeg']['to']}")
             lines.append(
-                f"     Line: {option['secondLeg']['line']}, Duration: {option['secondLeg']['duration']} min"
+                f"     Line: {option['secondLeg']['line']}, Duration: {option['secondLeg'].get('durationFormatted', str(option['secondLeg']['duration']) + ' min')}"
             )
 
             # Show second leg departure time
             if "departure" in option["secondLeg"]:
-                lines.append(f"     Depart: +{option['secondLeg']['departure']} min")
+                depart_fmt = option["secondLeg"].get(
+                    "departureFormatted", str(option["secondLeg"]["departure"]) + " min"
+                )
+                lines.append(f"     Depart: +{depart_fmt}")
 
-            lines.append(f"  ⏰ Total time: {option['totalDuration']} minutes")
+            total_fmt = option.get(
+                "totalDurationFormatted", str(option["totalDuration"]) + " minutes"
+            )
+            lines.append(f"  ⏰ Total time: {total_fmt}")
 
         return "\n".join(lines)
