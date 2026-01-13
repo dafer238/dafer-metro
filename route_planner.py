@@ -299,24 +299,15 @@ class RoutePlanner:
 
             try:
                 # Get train schedule from transfer station to destination
-                print(f"DEBUG: Fetching trains from {transfer_station} to {destination}")
-                print(f"DEBUG: Arrival at transfer: {arrival_at_transfer_sec / 60:.2f} minutes")
-
                 transfer_route = await self.metro_client.get_route_info(
                     transfer_station, destination
                 )
 
                 if transfer_route.get("trains"):
-                    print(
-                        f"DEBUG: Found {len(transfer_route['trains'])} trains from transfer station"
-                    )
                     # Find the first train that departs after we arrive at transfer station
                     arrival_at_transfer_min = arrival_at_transfer_sec / 60
                     for train in transfer_route["trains"]:
                         train_departure_time = train.get("estimated", 0)
-                        print(
-                            f"DEBUG: Train departs in {train_departure_time} min (arrival={arrival_at_transfer_min:.2f} min)"
-                        )
 
                         # If this train departs after we arrive, use it
                         # Add minimum 30 seconds for platform transfer
@@ -324,18 +315,12 @@ class RoutePlanner:
                             transfer_wait_sec = max(
                                 30, train_departure_time * 60 - arrival_at_transfer_sec
                             )
-                            print(
-                                f"DEBUG: Found matching train! Wait time: {transfer_wait_sec / 60:.2f} minutes"
-                            )
                             break
                     else:
                         # If no train found departing after arrival, use the first train's time as minimum wait
                         if transfer_route["trains"]:
                             transfer_wait_sec = max(
                                 30, transfer_route["trains"][0].get("estimated", 5) * 60
-                            )
-                            print(
-                                f"DEBUG: No train after arrival, using first train wait: {transfer_wait_sec / 60:.2f} min"
                             )
 
                     # Use actual duration from transfer to destination

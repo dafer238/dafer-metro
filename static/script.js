@@ -428,7 +428,6 @@ function displayTrains(trains) {
     
     let html = `
         <div class="next-train-section">
-            <h3 class="next-train-title">🚀 Next Metro</h3>
             ${createTrainHtml(nextTrain, 0, true)}
         </div>
     `;
@@ -436,7 +435,6 @@ function displayTrains(trains) {
     if (upcomingTrains.length > 0) {
         html += `
         <div class="upcoming-trains-section">
-            <h3 class="upcoming-trains-title">Upcoming Trains</h3>
             <div class="train-list">
                 ${upcomingTrains.map((train, index) => createTrainHtml(train, index + 1, false)).join('')}
             </div>
@@ -506,26 +504,38 @@ function clearTrainTimers() {
 
 async function refreshTrainData(origin, destination) {
     try {
-        // Call Metro Bilbao API directly from client to avoid rate limiting on server IP
+        console.log('Refreshing train data...');
+        
+        // Call Metro Bilbao API directly from client IP to avoid backend rate limiting
         const response = await fetch(`${metroBilbaoApiUrl}/${origin}/${destination}`);
         
         if (!response.ok) {
+            console.error('Failed to fetch from Metro Bilbao API');
             return;
         }
         
-        const data = await response.json();
-        displayTrains(data.trains);
+        const rawData = await response.json();
         
-        // Update arrival time displays
-        const trainItems = document.querySelectorAll('.train-item[data-arrival-time]');
-        trainItems.forEach(item => {
-            const arrivalTime = new Date(parseInt(item.dataset.arrivalTime));
-            const timeWithSeconds = arrivalTime.toLocaleTimeString('en-GB', {hour: '2-digit', minute: '2-digit', second: '2-digit'});
-            const arrivalTimeElement = item.querySelector('.train-arrival-time');
-            if (arrivalTimeElement) {
-                arrivalTimeElement.textContent = timeWithSeconds;
-            }
+        // Send raw data to backend for processing (adds totalTimeToDestination, etc.)
+        const processResponse = await fetch('/api/process', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ data: rawData })
         });
+        
+        if (!processResponse.ok) {
+            console.error('Failed to process data on backend');
+            return;
+        }
+        
+        const processedData = await processResponse.json();
+        console.log('Train data refreshed successfully');
+        
+        if (processedData.trains) {
+            displayTrains(processedData.trains);
+        }
         
     } catch (error) {
         console.error('Error refreshing train data:', error);
