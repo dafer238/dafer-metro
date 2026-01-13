@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Metro Bilbao - Planificador de Rutas</title>
+    <title>Planificador Metro Bilbao</title>
     <link rel="stylesheet" href="/static/style.css?v=2">
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
 </head>
@@ -11,8 +11,8 @@
     <div class="container">
         <header>
             <button id="langToggle" class="lang-toggle" title="Cambiar idioma / Change language">EN</button>
-            <h1 data-i18n="header.title">🚇 Planificador de Rutas Metro Bilbao</h1>
-            <p class="subtitle" data-i18n="header.subtitle">Información en tiempo real y planificación de rutas</p>
+            <h1 data-i18n="header.title">🚇 Planificador Metro Bilbao al segundo</h1>
+            <p class="subtitle" data-i18n="header.subtitle">Información en tiempo real</p>
             <div id="nightModeIndicator" class="night-indicator"></div>
             <div id="visitorCounter" class="visitor-counter"></div>
         </header>
@@ -21,7 +21,7 @@
             <section class="search-section">
                 <div class="input-group">
                     <div class="input-wrapper">
-                        <label for="origin" data-i18n="form.origin">Estación de Origen</label>
+                        <label for="origin" data-i18n="form.origin">Estación de origen</label>
                         <input 
                             type="text" 
                             id="origin" 
@@ -37,7 +37,7 @@
                     </div>
 
                     <div class="input-wrapper">
-                        <label for="destination" data-i18n="form.destination">Estación de Destino</label>
+                        <label for="destination" data-i18n="form.destination">Estación de destino</label>
                         <input 
                             type="text" 
                             id="destination" 
@@ -49,7 +49,7 @@
                     </div>
                 </div>
 
-                <button id="searchButton" class="search-btn" data-i18n="form.searchButton">Buscar Ruta</button>
+                <button id="searchButton" class="search-btn" data-i18n="form.searchButton">Buscar ruta</button>
             </section>
 
             <section id="loadingSection" class="loading hidden">
@@ -67,32 +67,32 @@
             <section id="resultsSection" class="results-section hidden">
                 <!-- Trip Overview -->
                 <div class="card trip-card">
-                    <h2 data-i18n="results.tripOverview">Vista General del Viaje</h2>
+                    <h2 data-i18n="results.tripOverview">Vista general del viaje</h2>
                     <div id="tripInfo"></div>
                 </div>
 
                 <!-- Upcoming Trains -->
                 <div class="card trains-card">
-                    <h2 data-i18n="results.metroSchedules">Salidas de Metro</h2>
+                    <h2 data-i18n="results.metroSchedules">Salidas de metro</h2>
                     <div id="trainsInfo"></div>
                 </div>
 
                 <!-- Transfer Information (if applicable) -->
                 <div id="transferCard" class="card transfer-card hidden">
-                    <h2 data-i18n="results.transferRequired">🔄 Transbordo Necesario</h2>
+                    <h2 data-i18n="results.transferRequired">🔄 Transbordo necesario</h2>
                     <div id="transferInfo"></div>
                 </div>
 
                 <!-- Station Exits -->
                 <div class="card exits-card">
-                    <h2 data-i18n="results.stationExits">Salidas de Estación</h2>
+                    <h2 data-i18n="results.stationExits">Salidas de estación</h2>
                     <div class="exits-container">
                         <div class="exits-column">
-                            <h3 data-i18n="results.originStation">Estación de Origen</h3>
+                            <h3 data-i18n="results.originStation">Estación de origen</h3>
                             <div id="originExits"></div>
                         </div>
                         <div class="exits-column">
-                            <h3 data-i18n="results.destinationStation">Estación de Destino</h3>
+                            <h3 data-i18n="results.destinationStation">Estación de destino</h3>
                             <div id="destinationExits"></div>
                         </div>
                     </div>
@@ -100,13 +100,13 @@
 
                 <!-- Environmental Impact -->
                 <div class="card co2-card">
-                    <h2 data-i18n="results.environmentalImpact">Impacto Ambiental</h2>
+                    <h2 data-i18n="results.environmentalImpact">Impacto ambiental</h2>
                     <div id="co2Info"></div>
                 </div>
 
                 <!-- Messages (if any) -->
                 <div id="messagesCard" class="card messages-card hidden">
-                    <h2 data-i18n="results.importantMessages">Mensajes Importantes</h2>
+                    <h2 data-i18n="results.importantMessages">Mensajes importantes</h2>
                     <div id="messagesInfo"></div>
                 </div>
             </section>

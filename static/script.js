@@ -11,29 +11,29 @@ let currentLang = 'es'; // Default language is Spanish
 const translations = {
     es: {
         header: {
-            title: '🚇 Planificador de Rutas Metro Bilbao',
-            subtitle: 'Información en tiempo real y planificación de rutas'
+            title: '🚇 Planificador Metro Bilbao al segundo',
+            subtitle: 'Información en tiempo real'
         },
         form: {
-            origin: 'Estación de Origen',
+            origin: 'Estación de origen',
             originPlaceholder: 'ej., ETX (Etxebarri)',
-            destination: 'Estación de Destino',
+            destination: 'Estación de destino',
             destinationPlaceholder: 'ej., ARZ (Ariz)',
             swapTitle: 'Intercambiar estaciones',
-            searchButton: 'Buscar Ruta'
+            searchButton: 'Buscar ruta'
         },
         loading: {
             text: 'Obteniendo información de ruta...'
         },
         results: {
-            tripOverview: 'Vista General del Viaje',
-            metroSchedules: 'Salidas de Metro',
-            transferRequired: '🔄 Transbordo Necesario',
-            stationExits: 'Salidas de Estación',
-            originStation: 'Estación de Origen',
-            destinationStation: 'Estación de Destino',
-            environmentalImpact: 'Impacto Ambiental',
-            importantMessages: 'Mensajes Importantes'
+            tripOverview: 'Vista general del viaje',
+            metroSchedules: 'Salidas de metro',
+            transferRequired: '🔄 Transbordo necesario',
+            stationExits: 'Salidas de estación',
+            originStation: 'Estación de origen',
+            destinationStation: 'Estación de destino',
+            environmentalImpact: 'Impacto ambiental',
+            importantMessages: 'Mensajes importantes'
         },
         footer: {
             dataProvided: 'Datos proporcionados por',
@@ -48,7 +48,7 @@ const translations = {
             yes: 'Sí',
             no: 'No',
             minutes: 'minutos',
-            earliestArrival: 'Llegada más Temprana'
+            earliestArrival: 'Llegada más temprana'
         },
         trains: {
             noTrains: 'No hay trenes disponibles en este momento.',
@@ -60,14 +60,14 @@ const translations = {
         },
         transfer: {
             transferWaitAt: 'Espera de transbordo en',
-            totalJourneyTime: 'Tiempo Total de Viaje:',
+            totalJourneyTime: 'Tiempo total de viaje:',
             arrivalAtDestination: 'Llegada al destino:',
             nextTrainDeparts: 'Próximo tren sale:',
             arrivesAtTransfer: 'Llega al transbordo:'
         },
         exits: {
             open: '✅ ABIERTA',
-            closed: '⚠️ Podría estar cerrada',
+            closed: '⚠️ Posiblemente cerrada',
             noExits: 'No hay información de salidas disponible',
             elevator: '♿ Ascensor',
             stairs: '🚶 Escaleras',
@@ -80,8 +80,8 @@ const translations = {
             youSave: '💚 Ahorras'
         },
         nightMode: {
-            night: '🌙 Modo Nocturno',
-            day: '☀️ Modo Diurno'
+            night: '🌙 Modo nocturno',
+            day: '☀️ Modo diurno'
         },
         visitors: {
             visitor: 'visitante único',
@@ -102,25 +102,25 @@ const translations = {
             subtitle: 'Real-time metro information and route planning'
         },
         form: {
-            origin: 'Origin Station',
+            origin: 'Origin station',
             originPlaceholder: 'e.g., ETX (Etxebarri)',
-            destination: 'Destination Station',
+            destination: 'Destination station',
             destinationPlaceholder: 'e.g., ARZ (Ariz)',
             swapTitle: 'Swap stations',
-            searchButton: 'Find Route'
+            searchButton: 'Find route'
         },
         loading: {
             text: 'Fetching route information...'
         },
         results: {
-            tripOverview: 'Trip Overview',
-            metroSchedules: 'Metro Departures',
-            transferRequired: '🔄 Transfer Required',
-            stationExits: 'Station Exits',
-            originStation: 'Origin Station',
-            destinationStation: 'Destination Station',
-            environmentalImpact: 'Environmental Impact',
-            importantMessages: 'Important Messages'
+            tripOverview: 'Trip overview',
+            metroSchedules: 'Metro departures',
+            transferRequired: '🔄 Transfer required',
+            stationExits: 'Station wxits',
+            originStation: 'Origin station',
+            destinationStation: 'Destination station',
+            environmentalImpact: 'Environmental impact',
+            importantMessages: 'Important messages'
         },
         footer: {
             dataProvided: 'Data provided by',
@@ -135,7 +135,7 @@ const translations = {
             yes: 'Yes',
             no: 'No',
             minutes: 'minutes',
-            earliestArrival: 'Earliest Arrival'
+            earliestArrival: 'Earliest arrival'
         },
         trains: {
             noTrains: 'No trains available at this time.',
@@ -146,8 +146,8 @@ const translations = {
             arrivesAtDestination: 'Arrives at destination:'
         },
         transfer: {
-            transferWaitAt: 'Transfer Wait at',
-            totalJourneyTime: 'Total Journey Time:',
+            transferWaitAt: 'Transfer wait at',
+            totalJourneyTime: 'Total journey time:',
             arrivalAtDestination: 'Arrival at destination:',
             nextTrainDeparts: 'Next train departs:',
             arrivesAtTransfer: 'Arrives at transfer:'
