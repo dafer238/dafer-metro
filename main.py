@@ -225,6 +225,19 @@ async def process_route_data(request: ProcessRouteRequest):
                     route_data["exits"]["destiny"]
                 )
 
+        # Recalculate CO2 values (API provides g/km, we need to convert to kg)
+        if "co2Metro" in route_data:
+            co2_data = route_data["co2Metro"]
+            # Convert g/km to kg by multiplying by distance and dividing by 1000
+            metro_co2_kg = (co2_data.get("co2metro", 0) * co2_data.get("metroDistance", 0)) / 1000
+            car_co2_kg = (co2_data.get("co2Car", 0) * co2_data.get("googleDistance", 0)) / 1000
+            diff_kg = car_co2_kg - metro_co2_kg
+
+            # Update the values with formatted strings
+            co2_data["co2metro"] = f"{metro_co2_kg:.3f}"
+            co2_data["co2Car"] = f"{car_co2_kg:.3f}"
+            co2_data["diff"] = f"{diff_kg:.3f}"
+
         # Add formatted information
         route_data["formatted"] = metro_client.format_complete_info(route_data)
 
