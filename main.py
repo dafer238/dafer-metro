@@ -240,9 +240,9 @@ async def process_route_data(request: ProcessRouteRequest):
             diff_kg = car_co2_kg - metro_co2_kg
 
             # Update the values with formatted strings
-            co2_data["co2metro"] = f"{metro_co2_kg:.3f}"
-            co2_data["co2Car"] = f"{car_co2_kg:.3f}"
-            co2_data["diff"] = f"{diff_kg:.3f}"
+            co2_data["co2metro"] = f"{metro_co2_kg:.2f}"
+            co2_data["co2Car"] = f"{car_co2_kg:.2f}"
+            co2_data["diff"] = f"{diff_kg:.2f}"
 
         # Add formatted information
         route_data["formatted"] = metro_client.format_complete_info(route_data)
