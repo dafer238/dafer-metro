@@ -5,9 +5,254 @@ let lastFetchTime = null;
 let autoRefreshInterval = null;
 let refreshIntervalSeconds = 10; // Default, will be updated from API
 let metroBilbaoApiUrl = 'https://api.metrobilbao.eus/metro/real-time'; // Default, will be updated from API
+let currentLang = 'es'; // Default language is Spanish
+
+// Translation dictionary
+const translations = {
+    es: {
+        header: {
+            title: '🚇 Planificador de Rutas Metro Bilbao',
+            subtitle: 'Información en tiempo real y planificación de rutas'
+        },
+        form: {
+            origin: 'Estación de Origen',
+            originPlaceholder: 'ej., ETX (Etxebarri)',
+            destination: 'Estación de Destino',
+            destinationPlaceholder: 'ej., ARZ (Ariz)',
+            swapTitle: 'Intercambiar estaciones',
+            searchButton: 'Buscar Ruta'
+        },
+        loading: {
+            text: 'Obteniendo información de ruta...'
+        },
+        results: {
+            tripOverview: 'Vista General del Viaje',
+            metroSchedules: 'Salidas de Metro',
+            transferRequired: '🔄 Transbordo Necesario',
+            stationExits: 'Salidas de Estación',
+            originStation: 'Estación de Origen',
+            destinationStation: 'Estación de Destino',
+            environmentalImpact: 'Impacto Ambiental',
+            importantMessages: 'Mensajes Importantes'
+        },
+        footer: {
+            dataProvided: 'Datos proporcionados por',
+            madeWith: 'Hecho con ❤️'
+        },
+        tripInfo: {
+            from: 'Desde',
+            to: 'Hasta',
+            duration: 'Duración',
+            line: 'Línea',
+            transfer: 'Transbordo',
+            yes: 'Sí',
+            no: 'No',
+            minutes: 'minutos',
+            earliestArrival: 'Llegada más Temprana'
+        },
+        trains: {
+            noTrains: 'No hay trenes disponibles en este momento.',
+            wagons: 'vagones',
+            toDestination: 'hasta destino',
+            departsIn: 'Sale en',
+            arrivesAtOrigin: 'Llega al origen:',
+            arrivesAtDestination: 'Llega al destino:'
+        },
+        transfer: {
+            transferWaitAt: 'Espera de transbordo en',
+            totalJourneyTime: 'Tiempo Total de Viaje:',
+            arrivalAtDestination: 'Llegada al destino:',
+            nextTrainDeparts: 'Próximo tren sale:',
+            arrivesAtTransfer: 'Llega al transbordo:'
+        },
+        exits: {
+            open: '✅ ABIERTA',
+            closed: '⚠️ Podría estar cerrada',
+            noExits: 'No hay información de salidas disponible',
+            elevator: '♿ Ascensor',
+            stairs: '🚶 Escaleras',
+            h24: '🌙 24h',
+            dayOnly: '☀️ Solo de día'
+        },
+        co2: {
+            metroCO2: '🚇 CO2 Metro',
+            carCO2: '🚗 CO2 Coche',
+            youSave: '💚 Ahorras'
+        },
+        nightMode: {
+            night: '🌙 Modo Nocturno',
+            day: '☀️ Modo Diurno'
+        },
+        visitors: {
+            visitor: 'visitante único',
+            visitors: 'visitantes únicos',
+            today: 'hoy'
+        },
+        errors: {
+            enterBoth: 'Por favor, introduce las estaciones de origen y destino',
+            samStation: 'El origen y el destino no pueden ser iguales',
+            fetchFailed: 'Error al obtener la información de ruta de Metro Bilbao',
+            processFailed: 'Error al procesar los datos de ruta',
+            checkStations: 'Por favor, verifica los códigos de estación e inténtalo de nuevo.'
+        }
+    },
+    en: {
+        header: {
+            title: '🚇 Metro Bilbao Route Planner',
+            subtitle: 'Real-time metro information and route planning'
+        },
+        form: {
+            origin: 'Origin Station',
+            originPlaceholder: 'e.g., ETX (Etxebarri)',
+            destination: 'Destination Station',
+            destinationPlaceholder: 'e.g., ARZ (Ariz)',
+            swapTitle: 'Swap stations',
+            searchButton: 'Find Route'
+        },
+        loading: {
+            text: 'Fetching route information...'
+        },
+        results: {
+            tripOverview: 'Trip Overview',
+            metroSchedules: 'Metro Departures',
+            transferRequired: '🔄 Transfer Required',
+            stationExits: 'Station Exits',
+            originStation: 'Origin Station',
+            destinationStation: 'Destination Station',
+            environmentalImpact: 'Environmental Impact',
+            importantMessages: 'Important Messages'
+        },
+        footer: {
+            dataProvided: 'Data provided by',
+            madeWith: 'Made with ❤️'
+        },
+        tripInfo: {
+            from: 'From',
+            to: 'To',
+            duration: 'Duration',
+            line: 'Line',
+            transfer: 'Transfer',
+            yes: 'Yes',
+            no: 'No',
+            minutes: 'minutes',
+            earliestArrival: 'Earliest Arrival'
+        },
+        trains: {
+            noTrains: 'No trains available at this time.',
+            wagons: 'wagons',
+            toDestination: 'to destination',
+            departsIn: 'Departs in',
+            arrivesAtOrigin: 'Arrives at origin:',
+            arrivesAtDestination: 'Arrives at destination:'
+        },
+        transfer: {
+            transferWaitAt: 'Transfer Wait at',
+            totalJourneyTime: 'Total Journey Time:',
+            arrivalAtDestination: 'Arrival at destination:',
+            nextTrainDeparts: 'Next train departs:',
+            arrivesAtTransfer: 'Arrives at transfer:'
+        },
+        exits: {
+            open: '✅ OPEN',
+            closed: '⚠️ Might be closed',
+            noExits: 'No exit information available',
+            elevator: '♿ Elevator',
+            stairs: '🚶 Stairs',
+            h24: '🌙 24h',
+            dayOnly: '☀️ Day only'
+        },
+        co2: {
+            metroCO2: '🚇 Metro CO2',
+            carCO2: '🚗 Car CO2',
+            youSave: '💚 You Save'
+        },
+        nightMode: {
+            night: '🌙 Night Mode',
+            day: '☀️ Day Mode'
+        },
+        visitors: {
+            visitor: 'unique visitor',
+            visitors: 'unique visitors',
+            today: 'today'
+        },
+        errors: {
+            enterBoth: 'Please enter both origin and destination stations',
+            samStation: 'Origin and destination cannot be the same',
+            fetchFailed: 'Failed to fetch route information from Metro Bilbao',
+            processFailed: 'Failed to process route data',
+            checkStations: 'Please check station codes and try again.'
+        }
+    }
+};
+
+// Translation helper function
+function t(key) {
+    const keys = key.split('.');
+    let value = translations[currentLang];
+    for (const k of keys) {
+        value = value?.[k];
+    }
+    return value || key;
+}
+
+// Apply translations to page
+function applyTranslations() {
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        const translation = t(key);
+        if (element.innerHTML.includes('<a')) {
+            // Preserve links in footer
+            const link = element.querySelector('a');
+            if (link) {
+                const linkHTML = link.outerHTML;
+                element.innerHTML = translation + ' ' + linkHTML;
+            } else {
+                element.textContent = translation;
+            }
+        } else {
+            element.textContent = translation;
+        }
+    });
+    
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+        const key = element.getAttribute('data-i18n-placeholder');
+        element.placeholder = t(key);
+    });
+    
+    document.querySelectorAll('[data-i18n-title]').forEach(element => {
+        const key = element.getAttribute('data-i18n-title');
+        element.title = t(key);
+    });
+    
+    // Update page title
+    document.title = t('header.title').replace('🚇 ', '') + ' - Metro Bilbao';
+    
+    // Update html lang attribute
+    document.documentElement.lang = currentLang;
+    
+    // Update language toggle button
+    const langToggle = document.getElementById('langToggle');
+    if (langToggle) {
+        langToggle.textContent = currentLang === 'es' ? 'EN' : 'ES';
+    }
+    
+    // Re-render results if they exist
+    if (window.currentRouteData) {
+        displayResults(window.currentRouteData);
+    }
+}
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', async () => {
+    // Load saved language preference
+    const savedLang = localStorage.getItem('metroLang');
+    if (savedLang) {
+        currentLang = savedLang;
+    }
+    
+    // Apply translations
+    applyTranslations();
+    
     // Load stations
     await loadStations();
     
@@ -44,8 +289,8 @@ async function updateVisitorCount() {
         const data = await response.json();
         const counter = document.getElementById('visitorCounter');
         if (counter && data.count !== undefined) {
-            const plural = data.count === 1 ? 'visitor' : 'visitors';
-            counter.textContent = `👥 ${data.count} unique ${plural} today!`;
+            const plural = data.count === 1 ? t('visitors.visitor') : t('visitors.visitors');
+            counter.textContent = `👥 ${data.count} ${plural} ${t('visitors.today')}!`;
         }
     } catch (error) {
         console.error('Error loading visitor count:', error);
@@ -73,10 +318,10 @@ async function updateNightMode() {
         
         const indicator = document.getElementById('nightModeIndicator');
         if (data.nightMode) {
-            indicator.textContent = '🌙 Night Mode';
+            indicator.textContent = t('nightMode.night');
             indicator.style.display = 'block';
         } else {
-            indicator.textContent = '☀️ Day Mode';
+            indicator.textContent = t('nightMode.day');
             indicator.style.display = 'block';
         }
     } catch (error) {
@@ -120,9 +365,17 @@ function setupEventListeners() {
     const swapButton = document.getElementById('swapButton');
     const originInput = document.getElementById('origin');
     const destinationInput = document.getElementById('destination');
+    const langToggle = document.getElementById('langToggle');
     
     searchButton.addEventListener('click', handleSearch);
     swapButton.addEventListener('click', handleSwap);
+    
+    // Language toggle
+    langToggle.addEventListener('click', () => {
+        currentLang = currentLang === 'es' ? 'en' : 'es';
+        localStorage.setItem('metroLang', currentLang);
+        applyTranslations();
+    });
     
     // Enter key to search
     originInput.addEventListener('keypress', (e) => {
@@ -244,12 +497,12 @@ async function handleSearch() {
     const destination = document.getElementById('destination').value.trim().toUpperCase();
     
     if (!origin || !destination) {
-        showError('Please enter both origin and destination stations');
+        showError(t('errors.enterBoth'));
         return;
     }
     
     if (origin === destination) {
-        showError('Origin and destination cannot be the same');
+        showError(t('errors.samStation'));
         return;
     }
     
@@ -266,7 +519,7 @@ async function handleSearch() {
         const metroBilbaoResponse = await fetch(`${metroBilbaoApiUrl}/${origin}/${destination}`);
         
         if (!metroBilbaoResponse.ok) {
-            throw new Error('Failed to fetch route information from Metro Bilbao');
+            throw new Error(t('errors.fetchFailed'));
         }
         
         const rawData = await metroBilbaoResponse.json();
@@ -281,7 +534,7 @@ async function handleSearch() {
         });
         
         if (!processResponse.ok) {
-            throw new Error('Failed to process route data');
+            throw new Error(t('errors.processFailed'));
         }
         
         const processedData = await processResponse.json();
@@ -290,7 +543,7 @@ async function handleSearch() {
         
     } catch (error) {
         console.error('Error fetching route:', error);
-        showError(`Error: ${error.message}. Please check station codes and try again.`);
+        showError(`${error.message}. ${t('errors.checkStations')}`);
     } finally {
         hideLoading();
     }
@@ -373,35 +626,35 @@ function displayTripInfo(trip) {
     const data = window.currentRouteData || {};
     
     // Use earliestArrival from backend if available
-    const earliestArrivalHtml = data.earliestArrival ? `<div class="label" style="margin-top: 8px; color: var(--primary-color);">Earliest Arrival</div>
+    const earliestArrivalHtml = data.earliestArrival ? `<div class="label" style="margin-top: 8px; color: var(--primary-color);">${t('tripInfo.earliestArrival')}</div>
                 <div class="value" style="color: var(--primary-color); font-weight: 600;">${data.earliestArrival}</div>` : '';
     
     const html = `
         <div class="trip-info-grid">
             <div class="trip-info-item">
-                <div class="label">From</div>
+                <div class="label">${t('tripInfo.from')}</div>
                 <div class="value">${trip.fromStation.name}</div>
                 <div class="label">${trip.fromStation.code}</div>
             </div>
             <div class="trip-info-item">
-                <div class="label">To</div>
+                <div class="label">${t('tripInfo.to')}</div>
                 <div class="value">${trip.toStation.name}</div>
                 <div class="label">${trip.toStation.code}</div>
             </div>
             <div class="trip-info-item">
-                <div class="label">Duration</div>
-                <div class="value">${trip.duration} minutes</div>
+                <div class="label">${t('tripInfo.duration')}</div>
+                <div class="value">${trip.duration} ${t('tripInfo.minutes')}</div>
                 ${earliestArrivalHtml}
             </div>
             <div class="trip-info-item">
-                <div class="label">Line</div>
+                <div class="label">${t('tripInfo.line')}</div>
                 <div class="value">${trip.line}</div>
             </div>
             <div class="trip-info-item">
-                <div class="label">Transfer</div>
+                <div class="label">${t('tripInfo.transfer')}</div>
                 <div class="value">
                     <span class="transfer-badge ${trip.transfer ? 'transfer-yes' : 'transfer-no'}">
-                        ${trip.transfer ? 'Yes' : 'No'}
+                        ${trip.transfer ? t('tripInfo.yes') : t('tripInfo.no')}
                     </span>
                 </div>
             </div>
@@ -413,7 +666,7 @@ function displayTripInfo(trip) {
 
 function displayTrains(trains) {
     if (!trains || trains.length === 0) {
-        document.getElementById('trainsInfo').innerHTML = '<p>No trains available at this time.</p>';
+        document.getElementById('trainsInfo').innerHTML = `<p>${t('trains.noTrains')}</p>`;
         return;
     }
     
@@ -443,18 +696,18 @@ function displayTrains(trains) {
             <div class="train-main-info">
                 <div class="train-direction">🚇 ${train.direction}</div>
                 <div class="train-details">
-                    ${train.wagons} wagons${train.totalTimeToDestination ? ' • ' + train.totalTimeToDestination + ' to destination' : ''}
+                    ${train.wagons} ${t('trains.wagons')}${train.totalTimeToDestination ? ' • ' + train.totalTimeToDestination + ' ' + t('trains.toDestination') : ''}
                 </div>
             </div>
             <div class="train-timing-info">
                 <div class="train-time-container">
-                    <span class="departs-label">Departs in </span>
+                    <span class="departs-label">${t('trains.departsIn')} </span>
                     <span class="train-time" data-seconds="${totalSeconds}" data-train-index="${index}">
                         ${formatTime(totalSeconds)}
                     </span>
                 </div>
-                <div class="train-details train-arrival-time">Arrives at origin: ${timeWithSeconds}</div>
-                ${arrivalAtDestStr ? '<div class="train-details train-dest-time">Arrives at destination: ' + arrivalAtDestStr + '</div>' : ''}
+                <div class="train-details train-arrival-time">${t('trains.arrivesAtOrigin')} ${timeWithSeconds}</div>
+                ${arrivalAtDestStr ? '<div class="train-details train-dest-time">' + t('trains.arrivesAtDestination') + ' ' + arrivalAtDestStr + '</div>' : ''}
             </div>
         </div>
         `;
@@ -592,8 +845,8 @@ function displayTransferInfo(transferOptions) {
                     </div>
                     <div class="step-info">
                         <span style="opacity: 0.7; font-size: 0.85em;">${option.firstLeg.from} → ${option.firstLeg.to}</span> • 
-                        Line ${option.firstLeg.line} • ${option.firstLeg.durationFormatted || option.firstLeg.duration + ' min'}
-                        ${option.firstLeg.arrivalTime ? '<br><span style="opacity: 0.8;">Arrives at transfer: ' + option.firstLeg.arrivalTime + '</span>' : ''}
+                        ${t('tripInfo.line')} ${option.firstLeg.line} • ${option.firstLeg.durationFormatted || option.firstLeg.duration + ' ' + t('tripInfo.minutes')}
+                        ${option.firstLeg.arrivalTime ? '<br><span style="opacity: 0.8;">' + t('transfer.arrivesAtTransfer') + ' ' + option.firstLeg.arrivalTime + '</span>' : ''}
                     </div>
                 </div>
             </div>
@@ -601,11 +854,11 @@ function displayTransferInfo(transferOptions) {
             <div class="transfer-step">
                 <div class="step-number">⏱️</div>
                 <div class="step-content">
-                    <div class="step-route">Transfer Wait at ${option.secondLeg.fromName || option.secondLeg.from}</div>
+                    <div class="step-route">${t('transfer.transferWaitAt')} ${option.secondLeg.fromName || option.secondLeg.from}</div>
                     <div class="step-info">
                         <span style="opacity: 0.7; font-size: 0.85em;">${option.secondLeg.from}</span> • 
-                        ${option.transferWaitFormatted || option.transferWait + ' min'}
-                        ${option.secondLeg.departureTime ? '<br><span style="opacity: 0.8;">Next train departs: ' + option.secondLeg.departureTime + '</span>' : ''}
+                        ${option.transferWaitFormatted || option.transferWait + ' ' + t('tripInfo.minutes')}
+                        ${option.secondLeg.departureTime ? '<br><span style="opacity: 0.8;">' + t('transfer.nextTrainDeparts') + ' ' + option.secondLeg.departureTime + '</span>' : ''}
                     </div>
                 </div>
             </div>
@@ -618,14 +871,14 @@ function displayTransferInfo(transferOptions) {
                     </div>
                     <div class="step-info">
                         <span style="opacity: 0.7; font-size: 0.85em;">${option.secondLeg.from} → ${option.secondLeg.to}</span> • 
-                        Line ${option.secondLeg.line} • ${option.secondLeg.durationFormatted || option.secondLeg.duration + ' min'}
+                        ${t('tripInfo.line')} ${option.secondLeg.line} • ${option.secondLeg.durationFormatted || option.secondLeg.duration + ' ' + t('tripInfo.minutes')}
                     </div>
                 </div>
             </div>
             
             <div style="text-align: center; padding: 16px; background: var(--light-color); border-radius: 8px; font-weight: 600;">
-                Total Journey Time: ${option.totalDurationFormatted || option.totalDuration + ' min'}
-                ${option.expectedArrival ? '<br><span style="font-size: 0.95em; color: var(--primary-color); margin-top: 8px; display: block;">Arrival at destination: ' + option.expectedArrival + '</span>' : ''}
+                ${t('transfer.totalJourneyTime')} ${option.totalDurationFormatted || option.totalDuration + ' ' + t('tripInfo.minutes')}
+                ${option.expectedArrival ? '<br><span style="font-size: 0.95em; color: var(--primary-color); margin-top: 8px; display: block;">' + t('transfer.arrivalAtDestination') + ' ' + option.expectedArrival + '</span>' : ''}
             </div>
         </div>
     `).join('');
@@ -640,7 +893,7 @@ function displayExits(exits) {
         ? exits.origin.map(exit => `
             <div class="exit-item ${exit.available ? 'available' : 'closed'}">
                 <div class="exit-status">
-                    ${exit.available ? '✅ OPEN' : '⚠️ Might be closed'}
+                    ${exit.available ? t('exits.open') : t('exits.closed')}
                 </div>
                 <div class="exit-name">${exit.name}</div>
                 ${exit.issues && exit.issues.length > 0 ? `
@@ -650,22 +903,22 @@ function displayExits(exits) {
                 ` : ''}
                 <div class="exit-features">
                     <span class="feature-badge">
-                        ${exit.elevator ? '♿ Elevator' : '🚶 Stairs'}
+                        ${exit.elevator ? t('exits.elevator') : t('exits.stairs')}
                     </span>
                     <span class="feature-badge">
-                        ${exit.nocturnal ? '🌙 24h' : '☀️ Day only'}
+                        ${exit.nocturnal ? t('exits.h24') : t('exits.dayOnly')}
                     </span>
                 </div>
             </div>
         `).join('')
-        : '<p>No exit information available</p>';
+        : `<p>${t('exits.noExits')}</p>`;
     
     // Destination exits
     const destHTML = exits.destiny && exits.destiny.length > 0
         ? exits.destiny.map(exit => `
             <div class="exit-item ${exit.available ? 'available' : 'closed'}">
                 <div class="exit-status">
-                    ${exit.available ? '✅ OPEN' : '⚠️ Might be closed'}
+                    ${exit.available ? t('exits.open') : t('exits.closed')}
                 </div>
                 <div class="exit-name">${exit.name}</div>
                 ${exit.issues && exit.issues.length > 0 ? `
@@ -675,15 +928,15 @@ function displayExits(exits) {
                 ` : ''}
                 <div class="exit-features">
                     <span class="feature-badge">
-                        ${exit.elevator ? '♿ Elevator' : '🚶 Stairs'}
+                        ${exit.elevator ? t('exits.elevator') : t('exits.stairs')}
                     </span>
                     <span class="feature-badge">
-                        ${exit.nocturnal ? '🌙 24h' : '☀️ Day only'}
+                        ${exit.nocturnal ? t('exits.h24') : t('exits.dayOnly')}
                     </span>
                 </div>
             </div>
         `).join('')
-        : '<p>No exit information available</p>';
+        : `<p>${t('exits.noExits')}</p>`;
     
     document.getElementById('originExits').innerHTML = originHTML;
     document.getElementById('destinationExits').innerHTML = destHTML;
@@ -693,21 +946,21 @@ function displayCO2Info(co2Data) {
     const html = `
         <div class="co2-comparison">
             <div class="co2-item co2-metro">
-                <div class="co2-label">🚇 Metro CO2</div>
+                <div class="co2-label">${t('co2.metroCO2')}</div>
                 <div class="co2-value">${co2Data.co2metro}</div>
                 <div class="co2-unit">kg CO2</div>
                 <div class="co2-unit">${co2Data.metroDistance} km</div>
             </div>
             
             <div class="co2-item co2-car">
-                <div class="co2-label">🚗 Car CO2</div>
+                <div class="co2-label">${t('co2.carCO2')}</div>
                 <div class="co2-value">${co2Data.co2Car}</div>
                 <div class="co2-unit">kg CO2</div>
                 <div class="co2-unit">${co2Data.googleDistance} km</div>
             </div>
             
             <div class="co2-item co2-savings">
-                <div class="co2-label">💚 You Save</div>
+                <div class="co2-label">${t('co2.youSave')}</div>
                 <div class="co2-value">${co2Data.diff}</div>
                 <div class="co2-unit">kg CO2</div>
             </div>
