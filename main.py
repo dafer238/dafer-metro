@@ -229,8 +229,14 @@ async def process_route_data(request: ProcessRouteRequest):
         if "co2Metro" in route_data:
             co2_data = route_data["co2Metro"]
             # Convert g/km to kg by multiplying by distance and dividing by 1000
-            metro_co2_kg = (co2_data.get("co2metro", 0) * co2_data.get("metroDistance", 0)) / 1000
-            car_co2_kg = (co2_data.get("co2Car", 0) * co2_data.get("googleDistance", 0)) / 1000
+            # Convert to float in case they're strings
+            metro_co2_g_km = float(co2_data.get("co2metro", 0))
+            car_co2_g_km = float(co2_data.get("co2Car", 0))
+            metro_distance = float(co2_data.get("metroDistance", 0))
+            google_distance = float(co2_data.get("googleDistance", 0))
+
+            metro_co2_kg = (metro_co2_g_km * metro_distance) / 1000
+            car_co2_kg = (car_co2_g_km * google_distance) / 1000
             diff_kg = car_co2_kg - metro_co2_kg
 
             # Update the values with formatted strings
