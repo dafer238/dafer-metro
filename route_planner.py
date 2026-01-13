@@ -6,6 +6,7 @@ from metro_client import MetroClient
 STATION_NAMES = {
     "PLE": "Plentzia",
     "SOP": "Sopela",
+    "URD": "Urduliz",
     "LAR": "Larrabasterra",
     "BER": "Berango",
     "IBB": "Ibarbengoa",
@@ -27,7 +28,9 @@ STATION_NAMES = {
     "IND": "Indautxu",
     "MOY": "Moyua",
     "ABA": "Abando",
-    "CAD": "Zazpikaleak/Casco Viejo",
+    "CAV": "Zazpikaleak/Casco Viejo",
+    "SAN": "Santutxu",
+    "BAS": "Basarrate",
     "BOL": "Bolueta",
     "ETX": "Etxebarri",
     "KAB": "Kabiezes",
@@ -41,14 +44,14 @@ STATION_NAMES = {
     "BAR": "Barakaldo",
     "ANS": "Ansio",
     "GUR": "Gurutzeta/Cruces",
-    "BAS": "Basauri",
     "ARZ": "Ariz",
-    "MAT": "Matiko",
-    "URI": "Uribarri",
-    "ZUR": "Zurbaranbarri",
-    "TXU": "Txurdinaga",
-    "OTX": "Otxarkoaga",
-    "KUK": "Kukullaga",
+    "BSR": "Basauri",
+    # "MAT": "Matiko",
+    # "URI": "Uribarri",
+    # "ZUR": "Zurbaranbarri",
+    # "TXU": "Txurdinaga",
+    # "OTX": "Otxarkoaga",
+    # "KUK": "Kukullaga",
 }
 
 
@@ -60,6 +63,7 @@ STATION_NAMES = {
 METRO_NETWORK = {
     "L1": [
         "PLE",
+        "URD",
         "SOP",
         "LAR",
         "BER",
@@ -82,7 +86,9 @@ METRO_NETWORK = {
         "IND",
         "MOY",
         "ABA",
-        "CAD",
+        "CAV",
+        "SAN",
+        "BAS",
         "BOL",
         "ETX",
     ],
@@ -98,26 +104,31 @@ METRO_NETWORK = {
         "BAR",
         "ANS",
         "GUR",
-        "BAS",
-        "ARZ",
         "ETX",
+        "ARZ",
+        "BSR",
         "BOL",
-        "CAD",
-        "ABN",
+        "BAS",
+        "SAN",
+        "CAV",
+        "ABA",
         "MOY",
-        "SAM",
         "IND",
+        "SAM",
+        "DEU",
+        "SAR",
+        "SIN",
     ],
-    "L3": ["MAT", "URI", "ZUR", "TXU", "OTX", "KUK", "BOL", "CAD"],
+    "L3": ["MAT", "URI", "CAV", "ZUR", "TXU", "OTX", "KUK"],
 }
 
 # Transfer stations used for connections
-# SIN (Abando): L1 ↔ L2
-# CAD (Casco Viejo/Zazpikaleak): L1/L2 ↔ L3
+# SIN (San Inazio): L1 ↔ L2
+# CAV (Casco Viejo/Zazpikaleak): L1/L2 ↔ L3
 TRANSFER_STATIONS = {
-    "L1-L2": "SIN",  # Abando for L1 ↔ L2 transfers
-    "L1-L3": "CAD",  # Casco Viejo for L1 ↔ L3 transfers
-    "L2-L3": "CAD",  # Casco Viejo for L2 ↔ L3 transfers
+    "L1-L2": "SIN",  # San Inazio for L1 ↔ L2 transfers
+    "L1-L3": "CAV",  # Casco Viejo for L1 ↔ L3 transfers
+    "L2-L3": "CAV",  # Casco Viejo for L2 ↔ L3 transfers
 }
 
 

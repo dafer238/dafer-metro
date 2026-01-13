@@ -11,7 +11,7 @@ let currentLang = 'es'; // Default language is Spanish
 const translations = {
     es: {
         header: {
-            title: '🚇 Planificador Metro Bilbao al segundo',
+            title: '🚇 Planificador Metro Bilbao, al segundo',
             subtitle: 'Información en tiempo real'
         },
         form: {
@@ -401,6 +401,26 @@ function setupEventListeners() {
             document.querySelectorAll('.suggestions').forEach(s => s.classList.remove('active'));
         }
     });
+    
+    // Reposition dropdowns on scroll
+    window.addEventListener('scroll', () => {
+        const originSuggestions = document.getElementById('originSuggestions');
+        const destinationSuggestions = document.getElementById('destinationSuggestions');
+        
+        if (originSuggestions.classList.contains('active')) {
+            const originInput = document.getElementById('origin');
+            const rect = originInput.getBoundingClientRect();
+            originSuggestions.style.top = `${rect.bottom + 4}px`;
+            originSuggestions.style.left = `${rect.left}px`;
+        }
+        
+        if (destinationSuggestions.classList.contains('active')) {
+            const destinationInput = document.getElementById('destination');
+            const rect = destinationInput.getBoundingClientRect();
+            destinationSuggestions.style.top = `${rect.bottom + 4}px`;
+            destinationSuggestions.style.left = `${rect.left}px`;
+        }
+    });
 }
 
 function showSuggestions(inputId) {
@@ -433,12 +453,18 @@ function showSuggestions(inputId) {
         return;
     }
     
-    // Show up to 10 matches
-    suggestionsDiv.innerHTML = matches.slice(0, 10).map(([code, name]) => `
+    // Show up to 50 matches (or all if fewer)
+    suggestionsDiv.innerHTML = matches.slice(0, 50).map(([code, name]) => `
         <div class="suggestion-item" onclick="selectStation('${inputId}', '${code}', '${name}')">
             <strong>${code}</strong> ${name}
         </div>
     `).join('');
+    
+    // Position dropdown using fixed positioning
+    const rect = input.getBoundingClientRect();
+    suggestionsDiv.style.top = `${rect.bottom + 4}px`;
+    suggestionsDiv.style.left = `${rect.left}px`;
+    suggestionsDiv.style.width = `${rect.width}px`;
     
     suggestionsDiv.classList.add('active');
 }

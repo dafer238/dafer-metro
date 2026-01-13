@@ -276,9 +276,9 @@ async def get_stations():
     # LINE 2 (Kabiezes ↔ Basauri)
     # LINE 3 (Matiko ↔ Kukullaga)
     stations = {
-        # Line 1 stations
         "PLE": "Plentzia",
         "SOP": "Sopela",
+        "URD": "Urduliz",
         "LAR": "Larrabasterra",
         "BER": "Berango",
         "IBB": "Ibarbengoa",
@@ -300,10 +300,11 @@ async def get_stations():
         "IND": "Indautxu",
         "MOY": "Moyua",
         "ABA": "Abando",
-        "CAD": "Zazpikaleak/Casco Viejo",
+        "CAV": "Zazpikaleak/Casco Viejo",
+        "SAN": "Santutxu",
+        "BAS": "Basarrate",
         "BOL": "Bolueta",
         "ETX": "Etxebarri",
-        # Line 2 stations
         "KAB": "Kabiezes",
         "STZ": "Santurtzi",
         "PEN": "Peñota",
@@ -315,17 +316,14 @@ async def get_stations():
         "BAR": "Barakaldo",
         "ANS": "Ansio",
         "GUR": "Gurutzeta/Cruces",
-        "BAS": "Basauri",
         "ARZ": "Ariz",
-        # ETX, BOL, CAD, ABN, MOY, SMM, IND already defined in Line 1
-        # Line 3 stations
-        "MAT": "Matiko",
-        "URI": "Uribarri",
-        "ZUR": "Zurbaranbarri",
-        "TXU": "Txurdinaga",
-        "OTX": "Otxarkoaga",
-        "KUK": "Kukullaga",
-        # BOL, CAD already defined in Line 1
+        "BSR": "Basauri",
+        # "MAT": "Matiko",
+        # "URI": "Uribarri",
+        # "ZUR": "Zurbaranbarri",
+        # "TXU": "Txurdinaga",
+        # "OTX": "Otxarkoaga",
+        # "KUK": "Kukullaga",
     }
 
     return {"stations": stations}
