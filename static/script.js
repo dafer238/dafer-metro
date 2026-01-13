@@ -20,6 +20,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Setup event listeners
     setupEventListeners();
     
+    // Setup visibility change listener for smart updates
+    setupVisibilityListener();
+    
     // Load saved stations
     loadSavedStations();
 });
@@ -79,6 +82,37 @@ async function updateNightMode() {
     } catch (error) {
         console.error('Error checking night mode:', error);
     }
+}
+
+function setupVisibilityListener() {
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            // Page is hidden (minimized or in background) - stop updates
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+                autoRefreshInterval = null;
+                console.log('Page hidden - pausing updates');
+            }
+        } else {
+            // Page is visible again - resume updates
+            const origin = document.getElementById('origin').value.trim().toUpperCase();
+            const destination = document.getElementById('destination').value.trim().toUpperCase();
+            
+            if (origin && destination && !autoRefreshInterval) {
+                console.log('Page visible - resuming updates');
+                
+                // Immediately refresh data
+                refreshTrainData(origin, destination);
+                
+                // Restart interval
+                autoRefreshInterval = setInterval(() => {
+                    if (origin && destination) {
+                        refreshTrainData(origin, destination);
+                    }
+                }, refreshIntervalSeconds * 1000);
+            }
+        }
+    });
 }
 
 function setupEventListeners() {
