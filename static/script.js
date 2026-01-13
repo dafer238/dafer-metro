@@ -388,42 +388,61 @@ function displayTrains(trains) {
     const routeData = window.currentRouteData || {};
     const tripDuration = routeData.trip ? routeData.trip.duration : 0;
     
-    const html = `
-        <div class="train-list">
-            ${trains.map((train, index) => {
-                // Parse the train arrival time
-                const arrivalTime = new Date(train.time);
-                // Calculate seconds remaining
-                const totalSeconds = Math.max(0, Math.round((arrivalTime - now) / 1000));
-                // Format the arrival time with seconds
-                const timeWithSeconds = arrivalTime.toLocaleTimeString('en-GB', {hour: '2-digit', minute: '2-digit', second: '2-digit'});
-                
-                // Calculate arrival at destination
-                let arrivalAtDestStr = '';
-                if (tripDuration > 0) {
-                    const arrivalAtDest = new Date(arrivalTime.getTime() + tripDuration * 60000);
-                    arrivalAtDestStr = arrivalAtDest.toLocaleTimeString('en-GB', {hour: '2-digit', minute: '2-digit'});
-                }
-                
-                return `
-                <div class="train-item" data-arrival-time="${arrivalTime.getTime()}" data-time-display="${timeWithSeconds}">
-                    <div>
-                        <div class="train-direction">🚇 ${train.direction}</div>
-                        <div class="train-details">
-                            ${train.wagons} wagons${train.totalTimeToDestination ? ' • ' + train.totalTimeToDestination + ' to destination' : ''}
-                        </div>
-                    </div>
-                    <div style="text-align: right;">
-                        <div class="train-time" data-seconds="${totalSeconds}" data-train-index="${index}">
-                            ${formatTime(totalSeconds)}
-                        </div>
-                        <div class="train-details train-arrival-time">${timeWithSeconds}</div>
-                        ${arrivalAtDestStr ? '<div class="train-details" style="color: var(--primary-color); font-weight: 500;">Arrival: ' + arrivalAtDestStr + '</div>' : ''}
-                    </div>
+    // Separate first train (next metro) from upcoming trains
+    const nextTrain = trains[0];
+    const upcomingTrains = trains.slice(1);
+    
+    // Helper function to create train HTML
+    const createTrainHtml = (train, index, isNext = false) => {
+        const arrivalTime = new Date(train.time);
+        const totalSeconds = Math.max(0, Math.round((arrivalTime - now) / 1000));
+        const timeWithSeconds = arrivalTime.toLocaleTimeString('en-GB', {hour: '2-digit', minute: '2-digit', second: '2-digit'});
+        
+        let arrivalAtDestStr = '';
+        if (tripDuration > 0) {
+            const arrivalAtDest = new Date(arrivalTime.getTime() + tripDuration * 60000);
+            arrivalAtDestStr = arrivalAtDest.toLocaleTimeString('en-GB', {hour: '2-digit', minute: '2-digit'});
+        }
+        
+        return `
+        <div class="train-item ${isNext ? 'next-train' : ''}" data-arrival-time="${arrivalTime.getTime()}" data-time-display="${timeWithSeconds}">
+            <div class="train-main-info">
+                <div class="train-direction">🚇 ${train.direction}</div>
+                <div class="train-details">
+                    ${train.wagons} wagons${train.totalTimeToDestination ? ' • ' + train.totalTimeToDestination + ' to destination' : ''}
                 </div>
-            `}).join('')}
+            </div>
+            <div class="train-timing-info">
+                <div class="train-time-container">
+                    <span class="departs-label">Departs in </span>
+                    <span class="train-time" data-seconds="${totalSeconds}" data-train-index="${index}">
+                        ${formatTime(totalSeconds)}
+                    </span>
+                </div>
+                <div class="train-details train-arrival-time">Arrives at origin: ${timeWithSeconds}</div>
+                ${arrivalAtDestStr ? '<div class="train-details train-dest-time">Arrives at destination: ' + arrivalAtDestStr + '</div>' : ''}
+            </div>
+        </div>
+        `;
+    };
+    
+    let html = `
+        <div class="next-train-section">
+            <h3 class="next-train-title">🚀 Next Metro</h3>
+            ${createTrainHtml(nextTrain, 0, true)}
         </div>
     `;
+    
+    if (upcomingTrains.length > 0) {
+        html += `
+        <div class="upcoming-trains-section">
+            <h3 class="upcoming-trains-title">Upcoming Trains</h3>
+            <div class="train-list">
+                ${upcomingTrains.map((train, index) => createTrainHtml(train, index + 1, false)).join('')}
+            </div>
+        </div>
+        `;
+    }
     
     document.getElementById('trainsInfo').innerHTML = html;
     startTrainCountdown();

@@ -332,10 +332,38 @@ main {
     gap: 8px;
 }
 
+.next-train-section {
+    margin-bottom: 16px;
+    padding: 12px;
+    background: linear-gradient(135deg, rgba(228, 0, 43, 0.15), rgba(0, 61, 165, 0.15));
+    border-radius: 10px;
+    border: 2px solid var(--primary-color);
+}
+
+.next-train-title {
+    margin-bottom: 10px;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.upcoming-trains-section {
+    margin-top: 12px;
+}
+
+.upcoming-trains-title {
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--border-color);
+}
 .train-item {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+        gap: 8px;
     padding: 8px;
     background: var(--light-color);
     border-radius: 6px;
@@ -343,6 +371,36 @@ main {
     transition: background-color 0.3s ease, opacity 0.5s ease;
 }
 
+.train-item.next-train {
+    background: var(--card-bg);
+    border-left-width: 5px;
+    padding: 10px;
+}
+
+.train-main-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.train-timing-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    text-align: left;
+}
+
+.train-time-container {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.departs-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
 @keyframes blink-yellow-animation {
     0%, 100% { background: var(--light-color); }
     50% { background: rgba(255, 193, 7, 0.3); }
@@ -368,11 +426,21 @@ main {
 }
 
 .train-time {
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     font-weight: 700;
     color: var(--primary-color);
 }
 
+.train-item.next-train .train-time {
+    font-size: 1.6rem;
+}
+
+.train-arrival-time,
+.train-dest-time {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
 .train-details {
     font-size: 0.85rem;
     color: var(--text-secondary);
@@ -668,26 +736,52 @@ footer a:hover {
             font-size: 0.85rem;
         }
         
+                .next-train-section {
+                    margin-bottom: 12px;
+                    padding: 10px;
+                }
+        
+                .next-train-title {
+                    font-size: 1rem;
+                    margin-bottom: 8px;
+                }
+        
+                .upcoming-trains-title {
+                    font-size: 0.85rem;
+                    margin-bottom: 6px;
+                }
         .train-list {
             gap: 5px;
         }
         
-        .train-item {
-            flex-direction: column;
-            align-items: flex-start;
-        gap: 5px;
+                .train-item {
+            gap: 5px;
             padding: 6px;
         }
         
+                .train-item.next-train {
+                    padding: 8px;
+                }
         .train-direction {
-        font-size: 0.85rem;
+            font-size: 0.85rem;
         }
         
         .train-time {
-        font-size: 1rem;
+            font-size: 1.1rem;
         }
-        .train-details {
+                .train-item.next-train .train-time {
+                    font-size: 1.4rem;
+                }
+        
+                .departs-label {
             font-size: 0.8rem;
+        .train-details {
+            font-size: 0.75rem;
+        }
+        
+        .train-arrival-time,
+        .train-dest-time {
+            font-size: 0.75rem;
         }
     .exits-container {
         grid-template-columns: 1fr;
