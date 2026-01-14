@@ -8,69 +8,6 @@ let metroBilbaoApiUrl = "https://api.metrobilbao.eus/metro/real-time"; // Defaul
 let currentLang = "es"; // Default language is Spanish
 let previousTrainData = null; // Store previous train data for comparison
 
-// Metro network structure for transfer station calculation
-const METRO_NETWORK = {
-  L1: [
-    "PLE",
-    "URD",
-    "SOP",
-    "LAR",
-    "BER",
-    "IBB",
-    "BID",
-    "ALG",
-    "AIB",
-    "NEG",
-    "GOB",
-    "ARE",
-    "LAM",
-    "LEI",
-    "AST",
-    "ERA",
-    "LUT",
-    "SIN",
-    "SAR",
-    "DEU",
-    "SAM",
-    "IND",
-    "MOY",
-    "ABA",
-    "CAV",
-    "SAN",
-    "BAS",
-    "BOL",
-    "ETX",
-  ],
-  L2: [
-    "KAB",
-    "STZ",
-    "PEN",
-    "POR",
-    "ABT",
-    "SES",
-    "URB",
-    "BAG",
-    "BAR",
-    "ANS",
-    "GUR",
-    "ETX",
-    "ARZ",
-    "BSR",
-    "BOL",
-    "BAS",
-    "SAN",
-    "CAV",
-    "ABA",
-    "MOY",
-    "IND",
-    "SAM",
-    "DEU",
-    "SAR",
-    "SIN",
-  ],
-  L3: ["MAT", "URI", "CAV", "ZUR", "TXU", "OTX", "KUK"],
-};
-
 // Time synchronization with server
 let timeOffset = 0; // Difference between server time and client time in milliseconds
 let serverTimeSynced = false;
@@ -114,46 +51,6 @@ async function syncServerTime() {
     console.warn("Failed to sync with server time:", error);
     // Continue with client time if sync fails
   }
-}
-
-/**
- * Find the optimal transfer station between origin and destination
- * @param {string} origin - Origin station code
- * @param {string} destination - Destination station code
- * @returns {string|null} Transfer station code or null if no transfer needed
- */
-function findTransferStation(origin, destination) {
-  // Find which lines contain origin and destination
-  let originLine = null;
-  let destinationLine = null;
-
-  for (const [line, stations] of Object.entries(METRO_NETWORK)) {
-    if (stations.includes(origin)) {
-      originLine = line;
-    }
-    if (stations.includes(destination)) {
-      destinationLine = line;
-    }
-  }
-
-  if (!originLine || !destinationLine || originLine === destinationLine) {
-    return null;
-  }
-
-  // Determine transfer station based on line combination
-  const lines = new Set([originLine, destinationLine]);
-
-  // L1 ↔ L2: use SIN (San Inazio)
-  if (lines.has("L1") && lines.has("L2")) {
-    return "SIN";
-  }
-
-  // L1 ↔ L3 or L2 ↔ L3: use CAV (Casco Viejo)
-  if (lines.has("L3")) {
-    return "CAV";
-  }
-
-  return null;
 }
 
 /**
@@ -201,9 +98,6 @@ async function logAPICall(
  */
 async function fetchTransferData(transferStation, destination) {
   try {
-    console.log(
-      `[Transfer API] Fetching: ${metroBilbaoApiUrl}/${transferStation}/${destination}`,
-    );
     const response = await fetch(
       `${metroBilbaoApiUrl}/${transferStation}/${destination}`,
     );
@@ -211,30 +105,19 @@ async function fetchTransferData(transferStation, destination) {
     const success = response.ok;
     const statusCode = response.status;
 
-    console.log(
-      `[Transfer API] Response status: ${statusCode}, success: ${success}`,
-    );
-
     if (!success) {
-      console.error(
-        `[Transfer API] Failed with status ${statusCode} for ${transferStation} → ${destination}`,
-      );
       await logAPICall(
         transferStation,
         destination,
         "transfer",
         false,
         statusCode,
-        `Failed to fetch transfer data - HTTP ${statusCode}`,
+        `Failed to fetch transfer data`,
       );
       return null;
     }
 
     const data = await response.json();
-    console.log(
-      `[Transfer API] Successfully fetched data for ${transferStation} → ${destination}`,
-      data,
-    );
     await logAPICall(
       transferStation,
       destination,
@@ -244,10 +127,7 @@ async function fetchTransferData(transferStation, destination) {
     );
     return data;
   } catch (error) {
-    console.error(
-      `[Transfer API] Exception fetching ${transferStation} → ${destination}:`,
-      error,
-    );
+    console.error("Error fetching transfer data:", error);
     await logAPICall(
       transferStation,
       destination,
@@ -859,54 +739,12 @@ async function handleSearch() {
     // Step 2: If transfer is required, fetch transfer data from client
     let transferData = null;
     if (rawData.trip && rawData.trip.transfer) {
+      const transferStation = rawData.trip.transferStation || "SIN"; // Default to San Inazio
       console.log(
-        `[Main Search] Transfer required for ${origin} → ${destination}`,
+        `Transfer required via ${transferStation}, fetching transfer route data...`,
       );
-      // Get transfer station from API response or calculate it
-      let transferStation = rawData.trip.transferStation;
-      console.log(
-        `[Main Search] Transfer station from API: ${transferStation}`,
-      );
-
-      if (!transferStation || transferStation === "Unknown") {
-        // Calculate the optimal transfer station
-        transferStation = findTransferStation(origin, destination);
-        console.log(
-          `[Main Search] Calculated transfer station: ${transferStation}`,
-        );
-      }
-
-      if (transferStation) {
-        console.log(
-          `[Main Search] Fetching transfer data: ${transferStation} → ${destination}`,
-        );
-        transferData = await fetchTransferData(transferStation, destination);
-
-        if (transferData) {
-          console.log(
-            `[Main Search] Transfer data received successfully:`,
-            transferData,
-          );
-        } else {
-          console.warn(
-            `[Main Search] Failed to fetch transfer data for ${transferStation} → ${destination}`,
-          );
-        }
-      } else {
-        console.warn(
-          `[Main Search] Could not determine transfer station for ${origin} → ${destination}`,
-        );
-      }
-    } else {
-      console.log(
-        `[Main Search] No transfer required for ${origin} → ${destination}`,
-      );
+      transferData = await fetchTransferData(transferStation, destination);
     }
-
-    console.log(
-      `[Main Search] Sending to backend - transferData:`,
-      transferData ? "present" : "null",
-    );
 
     // Step 3: Send raw data to our backend for processing (exit availability, calculations, etc.)
     const processResponse = await fetch("/api/process", {
@@ -1331,29 +1169,8 @@ async function refreshTrainData(origin, destination) {
     // If transfer is required, fetch transfer data
     let transferData = null;
     if (rawData.trip && rawData.trip.transfer) {
-      console.log(`[Refresh] Transfer required for ${origin} → ${destination}`);
-      // Get transfer station from API response or calculate it
-      let transferStation = rawData.trip.transferStation;
-
-      if (!transferStation || transferStation === "Unknown") {
-        // Calculate the optimal transfer station
-        transferStation = findTransferStation(origin, destination);
-        console.log(
-          `[Refresh] Calculated transfer station: ${transferStation}`,
-        );
-      }
-
-      if (transferStation) {
-        console.log(
-          `[Refresh] Fetching transfer data: ${transferStation} → ${destination}`,
-        );
-        transferData = await fetchTransferData(transferStation, destination);
-        if (transferData) {
-          console.log(`[Refresh] Transfer data received successfully`);
-        } else {
-          console.warn(`[Refresh] Failed to fetch transfer data`);
-        }
-      }
+      const transferStation = rawData.trip.transferStation || "SIN";
+      transferData = await fetchTransferData(transferStation, destination);
     }
 
     // Send raw data to backend for processing (adds totalTimeToDestination, etc.)
