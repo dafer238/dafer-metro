@@ -430,41 +430,61 @@ main {
     color: var(--text-secondary);
     font-weight: 500;
 }
+/* Improved animations using opacity-based overlays for smooth transitions */
 @keyframes blink-yellow-animation {
-    0%, 100% { background: var(--light-color); }
-    50% { background: rgba(255, 193, 7, 0.3); }
+    0%,
+        100% {
+            background-color: var(--light-color);
+        }
+    
+        50% {
+            background-color: rgba(255, 193, 7, 0.3);
+        }
 }
 
 @keyframes blink-red-animation {
-    0%, 100% { background: var(--light-color); }
-    50% { background: rgba(220, 53, 69, 0.3); }
+    0%,
+        100% {
+            background-color: var(--light-color);
+        }
+    
+        50% {
+            background-color: rgba(220, 53, 69, 0.3);
+        }
 }
 
+/* Single-run animations with opacity fade for delay/early notifications */
 @keyframes blink-delay-animation {
     0% {
-        background: var(--light-color);
+        background-color: var(--light-color);
+            box-shadow: 0 0 0 rgba(220, 53, 69, 0);
     }
-
-    20% {
-        background: rgba(220, 53, 69, 0.12);
+    
+        15% {
+            background-color: rgba(220, 53, 69, 0.4);
+            box-shadow: 0 0 20px rgba(220, 53, 69, 0.4);
     }
-
+    
     100% {
-        background: var(--light-color);
+        background-color: var(--light-color);
+            box-shadow: 0 0 0 rgba(220, 53, 69, 0);
     }
 }
 
 @keyframes blink-early-animation {
     0% {
-        background: var(--light-color);
+        background-color: var(--light-color);
+            box-shadow: 0 0 0 rgba(40, 167, 69, 0);
     }
-
-    20% {
-        background: rgba(40, 167, 69, 0.12);
+    
+        15% {
+            background-color: rgba(40, 167, 69, 0.4);
+            box-shadow: 0 0 20px rgba(40, 167, 69, 0.4);
     }
-
+    
     100% {
-        background: var(--light-color);
+        background-color: var(--light-color);
+            box-shadow: 0 0 0 rgba(40, 167, 69, 0);
     }
 }
 .train-item.blink-yellow {

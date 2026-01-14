@@ -264,6 +264,28 @@ async def health_check():
     }
 
 
+@app.get("/api/time")
+async def get_server_time():
+    """
+    Get current server time in Madrid timezone (Europe/Madrid)
+    This helps clients sync with server time to avoid issues with incorrect local clocks
+
+    Returns:
+        Current server time as ISO 8601 string and Unix timestamp in milliseconds
+    """
+    import pytz
+
+    # Get Madrid timezone
+    madrid_tz = pytz.timezone("Europe/Madrid")
+    now_madrid = datetime.now(madrid_tz)
+
+    return {
+        "timestamp": int(now_madrid.timestamp() * 1000),  # milliseconds
+        "iso": now_madrid.isoformat(),
+        "timezone": "Europe/Madrid",
+    }
+
+
 @app.get("/api/stations")
 async def get_stations():
     """

@@ -8,6 +8,51 @@ let metroBilbaoApiUrl = 'https://api.metrobilbao.eus/metro/real-time'; // Defaul
 let currentLang = 'es'; // Default language is Spanish
 let previousTrainData = null; // Store previous train data for comparison
 
+// Time synchronization with server
+let timeOffset = 0; // Difference between server time and client time in milliseconds
+let serverTimeSynced = false;
+
+/**
+ * Get the current time synchronized with the server
+ * This uses the server's Madrid timezone time to avoid issues with incorrect client clocks
+ * @returns {number} Current timestamp in milliseconds
+ */
+function getCurrentTime() {
+    return Date.now() + timeOffset;
+}
+
+/**
+ * Sync with server time on page load
+ * Fetches the server's current time and calculates the offset from client time
+ */
+async function syncServerTime() {
+    try {
+        const clientTimeBefore = Date.now();
+        const response = await fetch('/api/time');
+        const clientTimeAfter = Date.now();
+        
+        if (!response.ok) {
+            console.warn('Could not sync with server time, using client time');
+            return;
+        }
+        
+        const data = await response.json();
+        
+        // Calculate round-trip time and adjust for network latency
+        const roundTripTime = clientTimeAfter - clientTimeBefore;
+        const estimatedServerTime = data.timestamp + (roundTripTime / 2);
+        
+        // Calculate offset
+        timeOffset = estimatedServerTime - clientTimeAfter;
+        serverTimeSynced = true;
+        
+        console.log(`Time synced with server. Offset: ${timeOffset}ms`);
+    } catch (error) {
+        console.warn('Failed to sync with server time:', error);
+        // Continue with client time if sync fails
+    }
+}
+
 // Translation dictionary
 const translations = {
     es: {
@@ -245,6 +290,9 @@ function applyTranslations() {
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', async () => {
+    // Sync with server time first (to avoid client clock issues)
+    await syncServerTime();
+    
     // Load saved language preference
     const savedLang = localStorage.getItem('metroLang');
     if (savedLang) {
@@ -697,8 +745,8 @@ function displayTrains(trains) {
         return;
     }
     
-    lastFetchTime = Date.now();
-    const now = new Date();
+    lastFetchTime = getCurrentTime();
+    const now = new Date(getCurrentTime());
     const routeData = window.currentRouteData || {};
     const tripDuration = routeData.trip ? routeData.trip.duration : 0;
     
@@ -855,7 +903,7 @@ function startTrainCountdown() {
     const interval = setInterval(() => {
         const trainTimeElements = document.querySelectorAll('.train-time[data-seconds]');
         const trainItems = document.querySelectorAll('.train-item[data-arrival-time]');
-        const now = Date.now();
+        const now = getCurrentTime();
         
         trainTimeElements.forEach(element => {
             let seconds = parseInt(element.dataset.seconds);
