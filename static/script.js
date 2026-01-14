@@ -8,6 +8,51 @@ let metroBilbaoApiUrl = 'https://api.metrobilbao.eus/metro/real-time'; // Defaul
 let currentLang = 'es'; // Default language is Spanish
 let previousTrainData = null; // Store previous train data for comparison
 
+// Time synchronization with server
+let timeOffset = 0; // Difference between server time and client time in milliseconds
+let serverTimeSynced = false;
+
+/**
+ * Get the current time synchronized with the server
+ * This uses the server's Madrid timezone time to avoid issues with incorrect client clocks
+ * @returns {number} Current timestamp in milliseconds
+ */
+function getCurrentTime() {
+    return Date.now() + timeOffset;
+}
+
+/**
+ * Sync with server time on page load
+ * Fetches the server's current time and calculates the offset from client time
+ */
+async function syncServerTime() {
+    try {
+        const clientTimeBefore = Date.now();
+        const response = await fetch('/api/time');
+        const clientTimeAfter = Date.now();
+        
+        if (!response.ok) {
+            console.warn('Could not sync with server time, using client time');
+            return;
+        }
+        
+        const data = await response.json();
+        
+        // Calculate round-trip time and adjust for network latency
+        const roundTripTime = clientTimeAfter - clientTimeBefore;
+        const estimatedServerTime = data.timestamp + (roundTripTime / 2);
+        
+        // Calculate offset
+        timeOffset = estimatedServerTime - clientTimeAfter;
+        serverTimeSynced = true;
+        
+        console.log(`Time synced with server. Offset: ${timeOffset}ms`);
+    } catch (error) {
+        console.warn('Failed to sync with server time:', error);
+        // Continue with client time if sync fails
+    }
+}
+
 // Translation dictionary
 const translations = {
     es: {
@@ -237,6 +282,12 @@ function applyTranslations() {
         langToggle.textContent = currentLang === 'es' ? 'EN' : 'ES';
     }
     
+    // Update visitor counter with current language
+    updateVisitorCount();
+    
+    // Update night mode indicator with current language
+    updateNightMode();
+    
     // Re-render results if they exist
     if (window.currentRouteData) {
         displayResults(window.currentRouteData);
@@ -245,6 +296,9 @@ function applyTranslations() {
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', async () => {
+    // Sync with server time first (to avoid client clock issues)
+    await syncServerTime();
+    
     // Load saved language preference
     const savedLang = localStorage.getItem('metroLang');
     if (savedLang) {
@@ -697,8 +751,8 @@ function displayTrains(trains) {
         return;
     }
     
-    lastFetchTime = Date.now();
-    const now = new Date();
+    lastFetchTime = getCurrentTime();
+    const now = new Date(getCurrentTime());
     const routeData = window.currentRouteData || {};
     const tripDuration = routeData.trip ? routeData.trip.duration : 0;
     
@@ -764,7 +818,7 @@ function displayTrains(trains) {
             <div class="train-main-info">
                 <div class="train-direction">🚇 ${train.direction}</div>
                 <div class="train-details">
-                    ${train.wagons} ${t('trains.wagons')}${train.totalTimeToDestination ? ' • ' + train.totalTimeToDestination + ' ' + t('trains.toDestination') : ''}
+                    ${train.wagons} ${t('trains.wagons')}${train.totalTimeToDestinationSeconds ? ' • ' + formatDuration(train.totalTimeToDestinationSeconds) + ' ' + t('trains.toDestination') : ''}
                 </div>
             </div>
             <div class="train-timing-info">
@@ -849,13 +903,22 @@ function formatTime(totalSeconds) {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 }
 
+function formatDuration(totalSeconds) {
+    const mins = Math.floor(totalSeconds / 60);
+    const secs = totalSeconds % 60;
+    if (secs > 0) {
+        return `${mins} min ${secs} sec`;
+    }
+    return `${mins} ${t('tripInfo.minutes')}`;
+}
+
 function startTrainCountdown() {
     clearTrainTimers();
     
     const interval = setInterval(() => {
         const trainTimeElements = document.querySelectorAll('.train-time[data-seconds]');
         const trainItems = document.querySelectorAll('.train-item[data-arrival-time]');
-        const now = Date.now();
+        const now = getCurrentTime();
         
         trainTimeElements.forEach(element => {
             let seconds = parseInt(element.dataset.seconds);
@@ -930,8 +993,26 @@ async function refreshTrainData(origin, destination) {
         const processedData = await processResponse.json();
         console.log('Train data refreshed successfully');
         
-        if (processedData.trains) {
-            displayTrains(processedData.trains);
+        // Update stored route data with fresh data
+        if (window.currentRouteData && processedData) {
+            // Update trains
+            if (processedData.trains) {
+                window.currentRouteData.trains = processedData.trains;
+                displayTrains(processedData.trains);
+            }
+            
+            // Update earliest arrival if it changed
+            if (processedData.earliestArrival) {
+                window.currentRouteData.earliestArrival = processedData.earliestArrival;
+                // Re-render trip info to show updated earliest arrival
+                displayTripInfo(window.currentRouteData.trip);
+            }
+            
+            // Update transfer options if they changed
+            if (processedData.transferOptions) {
+                window.currentRouteData.transferOptions = processedData.transferOptions;
+                displayTransferInfo(processedData.transferOptions);
+            }
         }
         
     } catch (error) {

@@ -190,7 +190,7 @@ async def process_route_data(request: ProcessRouteRequest):
             total_time_sec = estimated_min * 60 + trip_duration_sec
             arrival_time = datetime.now() + timedelta(seconds=total_time_sec)
             train["arrivalAtDestination"] = arrival_time.strftime("%H:%M:%S")
-            train["totalTimeToDestination"] = route_planner._format_duration(total_time_sec)
+            train["totalTimeToDestinationSeconds"] = int(total_time_sec)
 
         # Calculate earliest arrival time
         if route_data.get("trains") and len(route_data["trains"]) > 0:
@@ -261,6 +261,28 @@ async def health_check():
         "nightMode": is_night,
         "apiBaseUrl": metro_client.settings.api_base_url,
         "autoRefreshInterval": metro_client.settings.auto_refresh_interval,
+    }
+
+
+@app.get("/api/time")
+async def get_server_time():
+    """
+    Get current server time in Madrid timezone (Europe/Madrid)
+    This helps clients sync with server time to avoid issues with incorrect local clocks
+
+    Returns:
+        Current server time as ISO 8601 string and Unix timestamp in milliseconds
+    """
+    import pytz
+
+    # Get Madrid timezone
+    madrid_tz = pytz.timezone("Europe/Madrid")
+    now_madrid = datetime.now(madrid_tz)
+
+    return {
+        "timestamp": int(now_madrid.timestamp() * 1000),  # milliseconds
+        "iso": now_madrid.isoformat(),
+        "timezone": "Europe/Madrid",
     }
 
 
