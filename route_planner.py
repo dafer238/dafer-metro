@@ -388,6 +388,13 @@ class RoutePlanner:
                     "departureTime": self._calculate_arrival_time(
                         arrival_at_transfer_sec + transfer_wait_sec
                     ),
+                    "arrival": arrival_at_transfer_sec + transfer_wait_sec + second_leg_duration_sec,
+                    "arrivalFormatted": self._format_time(
+                        arrival_at_transfer_sec + transfer_wait_sec + second_leg_duration_sec
+                    ),
+                    "arrivalTime": self._calculate_arrival_time(
+                        arrival_at_transfer_sec + transfer_wait_sec + second_leg_duration_sec
+                    ),
                 },
                 "totalDuration": total_time_sec,
                 "totalDurationFormatted": self._format_duration(total_time_sec),
@@ -455,12 +462,14 @@ class RoutePlanner:
                 f"     Line: {option['secondLeg']['line']}, Duration: {option['secondLeg'].get('durationFormatted', str(option['secondLeg']['duration']) + ' min')}"
             )
 
-            # Show second leg departure time
-            if "departure" in option["secondLeg"]:
-                depart_fmt = option["secondLeg"].get(
-                    "departureFormatted", str(option["secondLeg"]["departure"]) + " min"
+            # Show second leg departure and arrival time
+            second_leg = option["secondLeg"]
+            if "departure" in second_leg and "arrival" in second_leg:
+                depart_fmt = second_leg.get(
+                    "departureFormatted", str(second_leg["departure"]) + " min"
                 )
-                lines.append(f"     Depart: +{depart_fmt}")
+                arrival_fmt = second_leg.get("arrivalFormatted", str(second_leg["arrival"]) + " min")
+                lines.append(f"     Depart: +{depart_fmt}, Arrive: +{arrival_fmt}")
 
             total_fmt = option.get(
                 "totalDurationFormatted", str(option["totalDuration"]) + " minutes"
