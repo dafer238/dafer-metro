@@ -282,6 +282,12 @@ function applyTranslations() {
         langToggle.textContent = currentLang === 'es' ? 'EN' : 'ES';
     }
     
+    // Update visitor counter with current language
+    updateVisitorCount();
+    
+    // Update night mode indicator with current language
+    updateNightMode();
+    
     // Re-render results if they exist
     if (window.currentRouteData) {
         displayResults(window.currentRouteData);
@@ -812,7 +818,7 @@ function displayTrains(trains) {
             <div class="train-main-info">
                 <div class="train-direction">🚇 ${train.direction}</div>
                 <div class="train-details">
-                    ${train.wagons} ${t('trains.wagons')}${train.totalTimeToDestination ? ' • ' + train.totalTimeToDestination + ' ' + t('trains.toDestination') : ''}
+                    ${train.wagons} ${t('trains.wagons')}${train.totalTimeToDestinationSeconds ? ' • ' + formatDuration(train.totalTimeToDestinationSeconds) + ' ' + t('trains.toDestination') : ''}
                 </div>
             </div>
             <div class="train-timing-info">
@@ -897,6 +903,15 @@ function formatTime(totalSeconds) {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 }
 
+function formatDuration(totalSeconds) {
+    const mins = Math.floor(totalSeconds / 60);
+    const secs = totalSeconds % 60;
+    if (secs > 0) {
+        return `${mins} min ${secs} sec`;
+    }
+    return `${mins} ${t('tripInfo.minutes')}`;
+}
+
 function startTrainCountdown() {
     clearTrainTimers();
     
@@ -978,8 +993,26 @@ async function refreshTrainData(origin, destination) {
         const processedData = await processResponse.json();
         console.log('Train data refreshed successfully');
         
-        if (processedData.trains) {
-            displayTrains(processedData.trains);
+        // Update stored route data with fresh data
+        if (window.currentRouteData && processedData) {
+            // Update trains
+            if (processedData.trains) {
+                window.currentRouteData.trains = processedData.trains;
+                displayTrains(processedData.trains);
+            }
+            
+            // Update earliest arrival if it changed
+            if (processedData.earliestArrival) {
+                window.currentRouteData.earliestArrival = processedData.earliestArrival;
+                // Re-render trip info to show updated earliest arrival
+                displayTripInfo(window.currentRouteData.trip);
+            }
+            
+            // Update transfer options if they changed
+            if (processedData.transferOptions) {
+                window.currentRouteData.transferOptions = processedData.transferOptions;
+                displayTransferInfo(processedData.transferOptions);
+            }
         }
         
     } catch (error) {

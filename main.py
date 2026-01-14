@@ -190,7 +190,7 @@ async def process_route_data(request: ProcessRouteRequest):
             total_time_sec = estimated_min * 60 + trip_duration_sec
             arrival_time = datetime.now() + timedelta(seconds=total_time_sec)
             train["arrivalAtDestination"] = arrival_time.strftime("%H:%M:%S")
-            train["totalTimeToDestination"] = route_planner._format_duration(total_time_sec)
+            train["totalTimeToDestinationSeconds"] = int(total_time_sec)
 
         # Calculate earliest arrival time
         if route_data.get("trains") and len(route_data["trains"]) > 0:
