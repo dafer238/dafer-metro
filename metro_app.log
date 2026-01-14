@@ -1,0 +1,278 @@
+2026-01-14 18:46:26,117 - main - INFO - Application started - Loaded visitor data: 0 visitors on 2026-01-14
+2026-01-14 18:46:31,578 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:46:31,946 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:46:41,583 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:46:41,789 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:46:51,651 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:46:51,872 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:47:01,656 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:47:01,852 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:47:11,722 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:47:11,953 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:47:21,616 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:47:21,832 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:47:31,615 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:47:31,831 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:47:41,650 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:47:41,882 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:47:51,621 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:47:51,815 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:48:01,622 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:48:01,816 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:48:08,241 - main - INFO - Stations list requested - IP: 88.14.136.245
+2026-01-14 18:48:08,250 - main - INFO - New visitor #1 - IP: 88.14.136.245 - User Agent: Mozilla/5.0 (Android 14; Mobile; rv:146.0) Gecko/1...
+2026-01-14 18:48:11,784 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:48:12,004 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:48:13,206 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:48:20,160 - main - INFO - Root page accessed - IP: 88.14.136.245
+2026-01-14 18:48:20,578 - main - INFO - Stations list requested - IP: 88.14.136.245
+2026-01-14 18:48:21,663 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:48:21,854 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:48:22,019 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:48:28,760 - main - INFO - Root page accessed - IP: 88.14.136.245
+2026-01-14 18:48:31,669 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:48:31,906 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:48:33,900 - main - INFO - Stations list requested - IP: 88.14.136.245
+2026-01-14 18:48:41,685 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:48:41,902 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:48:44,366 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:48:44,603 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/ABT "HTTP/1.1 200 OK"
+2026-01-14 18:48:51,664 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:48:51,877 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:48:55,068 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:48:55,296 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/ABT "HTTP/1.1 200 OK"
+2026-01-14 18:49:01,675 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:49:01,851 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:49:05,099 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:49:05,328 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/ABT "HTTP/1.1 200 OK"
+2026-01-14 18:49:11,823 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:49:12,021 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:49:15,300 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:49:15,503 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/ABT "HTTP/1.1 200 OK"
+2026-01-14 18:49:21,719 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:49:21,928 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:49:25,167 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:49:25,354 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/ABT "HTTP/1.1 200 OK"
+2026-01-14 18:49:31,759 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:49:31,976 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:49:35,038 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:49:35,261 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/ABT "HTTP/1.1 200 OK"
+2026-01-14 18:49:41,966 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:49:42,215 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:49:44,938 - main - INFO - Root page accessed - IP: 88.14.136.245
+2026-01-14 18:49:45,142 - main - INFO - Stations list requested - IP: 88.14.136.245
+2026-01-14 18:49:50,432 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:49:51,743 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:49:51,956 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:50:00,823 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:50:01,757 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:50:01,941 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:50:10,841 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:50:11,972 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:50:12,204 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:50:21,759 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:50:21,977 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:50:31,749 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:50:31,945 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:50:41,898 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:50:42,119 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:50:51,778 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:50:51,987 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:51:01,842 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:51:02,040 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:51:11,870 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:51:12,095 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:51:21,836 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:51:22,046 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:51:31,883 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:51:32,114 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:51:41,867 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:51:42,086 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:51:49,656 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:51:51,887 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:51:52,110 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:51:59,575 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:52:01,872 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:52:02,047 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:52:09,924 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:52:11,896 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:52:12,096 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:52:19,583 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:52:21,911 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:52:22,137 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:52:29,553 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:52:31,927 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:52:32,159 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:52:39,656 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:52:41,921 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:52:42,137 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:52:51,888 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:52:52,147 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:53:01,972 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:53:02,204 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:53:12,075 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:53:12,310 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:53:18,677 - main - INFO - Process route data request - IP: 2a02:9130:982e:9cc9:3ca2:fd58:aadc:54f
+2026-01-14 18:53:21,966 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:53:22,178 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:53:31,935 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:53:32,159 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:53:41,955 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:53:42,142 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:53:52,001 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:53:52,238 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:54:01,980 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:54:02,176 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:54:12,006 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:54:12,220 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:54:22,024 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:54:22,261 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:54:32,015 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:54:32,230 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:54:42,039 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:54:42,270 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:54:52,053 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:54:52,269 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:55:02,024 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:55:02,207 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:55:12,040 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:55:12,249 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:55:22,057 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:55:22,279 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:55:32,069 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:55:32,276 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:55:42,045 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:55:42,242 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:55:52,097 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:55:52,337 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:55:54,350 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:56:02,208 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:56:02,398 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:56:04,323 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:56:12,081 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:56:12,263 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:56:14,386 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:56:22,103 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:56:22,344 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:56:24,144 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:56:32,232 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:56:32,429 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:56:34,352 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:56:42,101 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:56:42,306 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:56:44,290 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:56:52,135 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:56:52,368 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:56:52,983 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:56:53,200 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/ABT "HTTP/1.1 200 OK"
+2026-01-14 18:57:02,255 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:57:02,487 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:57:03,443 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:57:03,627 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/ABT "HTTP/1.1 200 OK"
+2026-01-14 18:57:12,136 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:57:12,352 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:57:13,688 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:57:13,921 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/ABT "HTTP/1.1 200 OK"
+2026-01-14 18:57:22,139 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:57:22,350 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:57:23,600 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:57:23,807 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/ABT "HTTP/1.1 200 OK"
+2026-01-14 18:57:32,110 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:57:32,302 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:57:42,166 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:57:42,383 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:57:47,970 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:57:48,178 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/ABT "HTTP/1.1 200 OK"
+2026-01-14 18:57:52,158 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:57:52,343 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:58:02,218 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:58:02,442 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:58:12,236 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:58:12,461 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:58:22,149 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:58:22,339 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:58:32,183 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:58:32,429 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:58:42,216 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:58:42,440 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 18:58:52,220 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 18:58:52,428 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/BAR "HTTP/1.1 200 OK"
+2026-01-14 21:29:36,004 - main - INFO - New visitor #2 - IP: 2a09:bac2:311b:191::28:c3 - User Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac O...
+2026-01-14 21:29:36,006 - main - INFO - Root page accessed - IP: 2a09:bac2:311b:191::28:c3
+2026-01-14 21:29:36,144 - main - INFO - Stations list requested - IP: 2a09:bac2:311b:191::28:c3
+2026-01-14 21:46:15,479 - main - INFO - Stations list requested - IP: 88.14.136.245
+2026-01-14 21:46:18,497 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 21:46:18,694 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/ABT "HTTP/1.1 200 OK"
+2026-01-14 21:46:33,311 - main - INFO - Stations list requested - IP: 88.14.136.245
+2026-01-14 21:46:35,007 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 21:46:35,237 - httpx - INFO - HTTP Request: GET https://api.metrobilbao.eus/metro/real-time/SIN/ABT "HTTP/1.1 200 OK"
+2026-01-14 21:49:45,155 - main - INFO - New visitor #3 - IP: 31.221.156.80 - User Agent: Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537...
+2026-01-14 21:49:45,344 - main - INFO - Stations list requested - IP: 31.221.156.80
+2026-01-14 21:49:58,368 - main - INFO - Process route data request - IP: 31.221.156.80
+2026-01-14 21:50:08,844 - main - INFO - Process route data request - IP: 31.221.156.80
+2026-01-14 21:50:16,418 - main - INFO - Root page accessed - IP: 31.221.156.80
+2026-01-14 21:50:17,386 - main - INFO - Stations list requested - IP: 31.221.156.80
+2026-01-14 21:50:27,732 - main - INFO - Process route data request - IP: 31.221.156.80
+2026-01-14 21:50:38,348 - main - INFO - Process route data request - IP: 31.221.156.80
+2026-01-14 21:50:48,586 - main - INFO - Process route data request - IP: 31.221.156.80
+2026-01-14 21:51:00,019 - main - INFO - Process route data request - IP: 31.221.156.80
+2026-01-14 21:51:08,320 - main - INFO - Process route data request - IP: 31.221.156.80
+2026-01-14 22:02:46,062 - main - INFO - Application shutting down - Saved visitor data: 3 visitors
+2026-01-14 22:02:48,815 - main - INFO - Application started - Loaded visitor data: 3 visitors on 2026-01-14
+2026-01-14 22:02:52,546 - main - INFO - New visitor #4 - IP: 88.14.136.245 - User Agent: Mozilla/5.0 (X11; Linux x86_64; rv:146.0) Gecko/20...
+2026-01-14 22:02:52,549 - main - INFO - Root page accessed - IP: 88.14.136.245
+2026-01-14 22:02:53,865 - main - INFO - Stations list requested - IP: 88.14.136.245
+2026-01-14 22:03:01,875 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:03:12,412 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:03:17,301 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:03:20,368 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:03:20,369 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:03:30,774 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:03:30,775 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:03:34,959 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:03:34,960 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:03:45,306 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:03:45,308 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:03:55,258 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:03:55,259 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:04:01,126 - main - INFO - Stations list requested - IP: 88.14.136.245
+2026-01-14 22:04:05,224 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:04:05,226 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:04:06,389 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:04:06,390 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:04:15,310 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:04:15,312 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:04:17,062 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:04:17,063 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:04:17,577 - main - INFO - Root page accessed - IP: 88.14.136.245
+2026-01-14 22:04:17,932 - main - INFO - Stations list requested - IP: 88.14.136.245
+2026-01-14 22:04:18,847 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:04:18,849 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:04:25,235 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:04:25,236 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:04:29,242 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:04:29,243 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:04:35,277 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:04:35,278 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:04:39,445 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:04:39,447 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:04:45,309 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:04:45,310 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:04:55,244 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:04:55,245 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:05:05,208 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:05:05,210 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:05:15,313 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:05:15,314 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:05:25,250 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:05:25,252 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:05:35,278 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:05:35,278 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:05:45,317 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:05:45,317 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:05:55,246 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:05:55,247 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:06:05,299 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:06:05,300 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:06:15,330 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:06:15,332 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
