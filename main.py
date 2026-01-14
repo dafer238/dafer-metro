@@ -1,27 +1,25 @@
-import json
-import logging
-import os
-from contextlib import asynccontextmanager
-from datetime import datetime
-from typing import Optional
-
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel
-
-from metro_client import MetroClient
 from route_planner import RoutePlanner
+from metro_client import MetroClient
+import os
+import json
+import logging
+from datetime import datetime
+from collections import defaultdict
+from contextlib import asynccontextmanager
 
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler("metro_app.log"),
-        logging.StreamHandler(),  # Also print to console
-    ],
+        logging.FileHandler('metro_app.log'),
+        logging.StreamHandler()  # Also print to console
+    ]
 )
 logger = logging.getLogger(__name__)
 
@@ -44,7 +42,7 @@ def load_visitor_data():
                 return data
         except (json.JSONDecodeError, ValueError) as e:
             print(f"Error loading visitor data: {e}. Starting fresh.")
-
+    
     # Return default structure if file doesn't exist or has errors
     return {"date": datetime.now().date(), "visitors": set(), "count": 0}
 
@@ -69,20 +67,14 @@ async def lifespan(app: FastAPI):
     global visitor_data
     # Startup: Load persisted data
     visitor_data = load_visitor_data()
-    logger.info(
-        f"Application started - Loaded visitor data: {visitor_data['count']} visitors on {visitor_data['date']}"
-    )
-    print(
-        f"Loaded visitor data: {visitor_data['count']} visitors on {visitor_data['date']}"
-    )
-
+    logger.info(f"Application started - Loaded visitor data: {visitor_data['count']} visitors on {visitor_data['date']}")
+    print(f"Loaded visitor data: {visitor_data['count']} visitors on {visitor_data['date']}")
+    
     yield
-
+    
     # Shutdown: Save data
     save_visitor_data()
-    logger.info(
-        f"Application shutting down - Saved visitor data: {visitor_data['count']} visitors"
-    )
+    logger.info(f"Application shutting down - Saved visitor data: {visitor_data['count']} visitors")
     print(f"Saved visitor data: {visitor_data['count']} visitors")
 
 
@@ -121,18 +113,6 @@ class ProcessRouteRequest(BaseModel):
     """Request model for processing raw Metro API data"""
 
     data: dict
-    transferData: Optional[dict] = None  # Optional transfer route data from client
-
-
-class LogAPICallRequest(BaseModel):
-    """Request model for logging client-side API calls"""
-
-    origin: str
-    destination: str
-    callType: str  # 'route', 'transfer', 'refresh'
-    success: bool
-    statusCode: Optional[int] = None
-    errorMessage: Optional[str] = None
 
 
 def track_visitor(request: Request):
@@ -142,9 +122,7 @@ def track_visitor(request: Request):
     # Reset counter if it's a new day
     current_date = datetime.now().date()
     if visitor_data["date"] != current_date:
-        logger.info(
-            f"Daily reset - Previous count: {visitor_data['count']} on {visitor_data['date']}"
-        )
+        logger.info(f"Daily reset - Previous count: {visitor_data['count']} on {visitor_data['date']}")
         visitor_data["date"] = current_date
         visitor_data["visitors"] = set()
         visitor_data["count"] = 0
@@ -160,9 +138,7 @@ def track_visitor(request: Request):
     if visitor_id not in visitor_data["visitors"]:
         visitor_data["visitors"].add(visitor_id)
         visitor_data["count"] = len(visitor_data["visitors"])
-        logger.info(
-            f"New visitor #{visitor_data['count']} - IP: {client_ip} - User Agent: {user_agent[:50]}..."
-        )
+        logger.info(f"New visitor #{visitor_data['count']} - IP: {client_ip} - User Agent: {user_agent[:50]}...")
         # Save data when a new visitor is tracked
         save_visitor_data()
 
@@ -213,16 +189,12 @@ async def get_route(origin: str, destination: str, request: Request):
         Complete route information including trains, exits, transfers, etc.
     """
     client_ip = request.client.host if request.client else "unknown"
-    logger.info(
-        f"Route query: {origin.upper()} → {destination.upper()} - IP: {client_ip}"
-    )
+    logger.info(f"Route query: {origin.upper()} → {destination.upper()} - IP: {client_ip}")
     try:
         route_data = await route_planner.get_route(origin.upper(), destination.upper())
         return JSONResponse(content=route_data)
     except Exception as e:
-        logger.error(
-            f"Error fetching route {origin} → {destination} - IP: {client_ip} - Error: {str(e)}"
-        )
+        logger.error(f"Error fetching route {origin} → {destination} - IP: {client_ip} - Error: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error fetching route: {str(e)}")
 
 
@@ -239,9 +211,7 @@ async def get_route_formatted(origin: str, destination: str, request: Request):
         Formatted text representation of route information
     """
     client_ip = request.client.host if request.client else "unknown"
-    logger.info(
-        f"Formatted route query: {origin.upper()} → {destination.upper()} - IP: {client_ip}"
-    )
+    logger.info(f"Formatted route query: {origin.upper()} → {destination.upper()} - IP: {client_ip}")
     try:
         route_data = await route_planner.get_route(origin.upper(), destination.upper())
 
@@ -255,9 +225,7 @@ async def get_route_formatted(origin: str, destination: str, request: Request):
 
         return {"formatted": formatted_text, "data": route_data}
     except Exception as e:
-        logger.error(
-            f"Error fetching formatted route {origin} → {destination} - IP: {client_ip} - Error: {str(e)}"
-        )
+        logger.error(f"Error fetching formatted route {origin} → {destination} - IP: {client_ip} - Error: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error fetching route: {str(e)}")
 
 
@@ -273,18 +241,14 @@ async def post_route(route_request: RouteRequest, request: Request):
         Complete route information
     """
     client_ip = request.client.host if request.client else "unknown"
-    logger.info(
-        f"POST route query: {route_request.origin.upper()} → {route_request.destination.upper()} - IP: {client_ip}"
-    )
+    logger.info(f"POST route query: {route_request.origin.upper()} → {route_request.destination.upper()} - IP: {client_ip}")
     try:
         route_data = await route_planner.get_route(
             route_request.origin.upper(), route_request.destination.upper()
         )
         return JSONResponse(content=route_data)
     except Exception as e:
-        logger.error(
-            f"Error in POST route {route_request.origin} → {route_request.destination} - IP: {client_ip} - Error: {str(e)}"
-        )
+        logger.error(f"Error in POST route {route_request.origin} → {route_request.destination} - IP: {client_ip} - Error: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error fetching route: {str(e)}")
 
 
@@ -325,26 +289,18 @@ async def process_route_data(process_request: ProcessRouteRequest, request: Requ
 
         # Check if transfer is required and calculate options
         if route_data.get("trip", {}).get("transfer"):
-            # If client provided transfer data, process it; otherwise calculate from main route data
-            if process_request.transferData:
-                origin = route_data["trip"]["fromStation"]["code"]
-                destination = route_data["trip"]["toStation"]["code"]
-                transfer_options = await route_planner._find_transfer_options(
-                    origin, destination, route_data, process_request.transferData
-                )
-                route_data["transferOptions"] = transfer_options
+            origin = route_data["trip"]["fromStation"]["code"]
+            destination = route_data["trip"]["toStation"]["code"]
+            transfer_options = await route_planner._find_transfer_options(
+                origin, destination, route_data
+            )
+            route_data["transferOptions"] = transfer_options
 
-                # Update earliest arrival if transfer is faster
-                if transfer_options and len(transfer_options) > 0:
-                    transfer_arrival = transfer_options[0].get("expectedArrival")
-                    if transfer_arrival:
-                        route_data["earliestArrival"] = transfer_arrival
-            else:
-                # No transfer data provided - client should fetch it
-                logger.warning(
-                    f"Transfer required but no transfer data provided - IP: {client_ip}"
-                )
-                route_data["transferOptions"] = []
+            # Update earliest arrival if transfer is faster
+            if transfer_options and len(transfer_options) > 0:
+                transfer_arrival = transfer_options[0].get("expectedArrival")
+                if transfer_arrival:
+                    route_data["earliestArrival"] = transfer_arrival
 
         # Add exit availability based on current time
         if "exits" in route_data:
@@ -382,37 +338,7 @@ async def process_route_data(process_request: ProcessRouteRequest, request: Requ
         return JSONResponse(content=route_data)
     except Exception as e:
         logger.error(f"Error processing route data - IP: {client_ip} - Error: {str(e)}")
-        raise HTTPException(
-            status_code=500, detail=f"Error processing route data: {str(e)}"
-        )
-
-
-@app.post("/api/log")
-async def log_api_call(log_request: LogAPICallRequest, request: Request):
-    """
-    Log client-side API calls to Metro Bilbao
-    This allows us to track API usage even when calls are made from client IP
-
-    Args:
-        log_request: LogAPICallRequest with call details
-
-    Returns:
-        Success status
-    """
-    client_ip = request.client.host if request.client else "unknown"
-
-    if log_request.success:
-        logger.info(
-            f"Client API call [{log_request.callType}]: {log_request.origin} → {log_request.destination} "
-            f"- IP: {client_ip} - Status: {log_request.statusCode} - SUCCESS"
-        )
-    else:
-        logger.error(
-            f"Client API call [{log_request.callType}]: {log_request.origin} → {log_request.destination} "
-            f"- IP: {client_ip} - Status: {log_request.statusCode} - FAILED - Error: {log_request.errorMessage}"
-        )
-
-    return {"status": "logged"}
+        raise HTTPException(status_code=500, detail=f"Error processing route data: {str(e)}")
 
 
 @app.get("/api/health")
