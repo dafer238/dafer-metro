@@ -276,3 +276,64 @@
 2026-01-14 22:06:05,300 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
 2026-01-14 22:06:15,330 - main - INFO - Process route data request - IP: 88.14.136.245
 2026-01-14 22:06:15,332 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:06:25,253 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:06:25,255 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:06:35,181 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:06:35,183 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:06:45,323 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:06:45,324 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:06:55,207 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:06:55,209 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:07:05,289 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:07:05,290 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:07:15,338 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:07:15,339 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:07:25,255 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:07:25,257 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:07:35,292 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:07:35,293 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:07:45,336 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:07:45,338 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:07:55,365 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:07:55,366 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:08:05,296 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:08:05,297 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:08:15,232 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:08:15,233 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:08:25,248 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:08:25,249 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:08:35,325 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:08:35,327 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:08:45,230 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:08:45,231 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:08:55,205 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:08:55,207 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:09:05,253 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:09:05,254 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:09:15,222 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:09:15,224 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:09:25,238 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:09:25,240 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:09:35,208 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:09:35,209 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:09:45,194 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:09:45,195 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:09:55,233 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:09:55,234 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:10:05,190 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:10:05,191 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:10:15,242 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:10:15,244 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:10:22,141 - main - INFO - Application shutting down - Saved visitor data: 4 visitors
+2026-01-14 22:10:24,800 - main - INFO - Application started - Loaded visitor data: 4 visitors on 2026-01-14
+2026-01-14 22:10:25,277 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:10:25,278 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:10:31,484 - main - INFO - Root page accessed - IP: 88.14.136.245
+2026-01-14 22:10:32,200 - main - INFO - Stations list requested - IP: 88.14.136.245
+2026-01-14 22:10:42,588 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:10:42,590 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:10:53,095 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:10:53,097 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:11:02,961 - main - INFO - Process route data request - IP: 88.14.136.245
+2026-01-14 22:11:02,963 - main - WARNING - Transfer required but no transfer data provided - IP: 88.14.136.245
+2026-01-14 22:16:54,998 - main - INFO - Application shutting down - Saved visitor data: 4 visitors
