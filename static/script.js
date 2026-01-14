@@ -6,6 +6,7 @@ let autoRefreshInterval = null;
 let refreshIntervalSeconds = 10; // Default, will be updated from API
 let metroBilbaoApiUrl = 'https://api.metrobilbao.eus/metro/real-time'; // Default, will be updated from API
 let currentLang = 'es'; // Default language is Spanish
+let previousTrainData = null; // Store previous train data for comparison
 
 // Translation dictionary
 const translations = {
@@ -701,9 +702,45 @@ function displayTrains(trains) {
     const routeData = window.currentRouteData || {};
     const tripDuration = routeData.trip ? routeData.trip.duration : 0;
     
+    // Filter out trains that have already departed (more than 15 seconds past arrival time)
+    const filteredTrains = trains.filter(train => {
+        const arrivalTime = new Date(train.time);
+        const timeDiff = now - arrivalTime;
+        return timeDiff < 15000; // Keep trains that haven't passed 15 seconds yet
+    });
+    
+    if (filteredTrains.length === 0) {
+        document.getElementById('trainsInfo').innerHTML = `<p>${t('trains.noTrains')}</p>`;
+        return;
+    }
+    
+    // Check if data has actually changed
+    const currentTrainData = filteredTrains.map(t => ({
+        direction: t.direction,
+        time: t.time,
+        wagons: t.wagons
+    }));
+    
+    const hasDataChanged = !previousTrainData || 
+        JSON.stringify(currentTrainData) !== JSON.stringify(previousTrainData);
+    
+    if (!hasDataChanged) {
+        // Data hasn't changed, just update countdowns
+        console.log('Train data unchanged, skipping redraw');
+        return;
+    }
+    
+    console.log('Train data changed, redrawing cards');
+    
+    // Detect delays and early arrivals by comparing with previous data
+    const trainChanges = detectTrainChanges(filteredTrains, previousTrainData);
+    
+    // Store current data for next comparison
+    previousTrainData = currentTrainData;
+    
     // Separate first train (next metro) from upcoming trains
-    const nextTrain = trains[0];
-    const upcomingTrains = trains.slice(1);
+    const nextTrain = filteredTrains[0];
+    const upcomingTrains = filteredTrains.slice(1);
     
     // Helper function to create train HTML
     const createTrainHtml = (train, index, isNext = false) => {
@@ -717,8 +754,13 @@ function displayTrains(trains) {
             arrivalAtDestStr = arrivalAtDest.toLocaleTimeString('en-GB', {hour: '2-digit', minute: '2-digit'});
         }
         
+        // Get change status for this train (delayed, early, or none)
+        const changeStatus = trainChanges[train.direction] || 'none';
+        const changeClass = changeStatus === 'delayed' ? 'blink-delay' : 
+                           changeStatus === 'early' ? 'blink-early' : '';
+        
         return `
-        <div class="train-item ${isNext ? 'next-train' : ''}" data-arrival-time="${arrivalTime.getTime()}" data-time-display="${timeWithSeconds}">
+        <div class="train-item ${isNext ? 'next-train' : ''} ${changeClass}" data-arrival-time="${arrivalTime.getTime()}" data-time-display="${timeWithSeconds}" data-direction="${train.direction}">
             <div class="train-main-info">
                 <div class="train-direction">🚇 ${train.direction}</div>
                 <div class="train-details">
@@ -756,7 +798,50 @@ function displayTrains(trains) {
     }
     
     document.getElementById('trainsInfo').innerHTML = html;
+    
+    // Remove blink animations after animation completes (1500ms)
+    setTimeout(() => {
+        document.querySelectorAll('.train-item.blink-delay, .train-item.blink-early').forEach(item => {
+            item.classList.remove('blink-delay', 'blink-early');
+        });
+    }, 1600);
+    
     startTrainCountdown();
+}
+
+// Helper function to detect train changes (delays/early arrivals)
+function detectTrainChanges(currentTrains, previousData) {
+    const changes = {};
+    
+    if (!previousData || previousData.length === 0) {
+        return changes;
+    }
+    
+    // Create a map of previous trains by direction
+    const previousMap = new Map();
+    previousData.forEach(train => {
+        previousMap.set(train.direction, new Date(train.time).getTime());
+    });
+    
+    // Compare current trains with previous ones
+    currentTrains.forEach(train => {
+        const currentTime = new Date(train.time).getTime();
+        const previousTime = previousMap.get(train.direction);
+        
+        if (previousTime) {
+            const timeDiff = currentTime - previousTime;
+            // If more than 10 seconds difference (to avoid minor fluctuations)
+            if (timeDiff > 10000) {
+                changes[train.direction] = 'delayed';
+                console.log(`Train to ${train.direction} delayed by ${Math.round(timeDiff/1000)}s`);
+            } else if (timeDiff < -10000) {
+                changes[train.direction] = 'early';
+                console.log(`Train to ${train.direction} early by ${Math.round(-timeDiff/1000)}s`);
+            }
+        }
+    });
+    
+    return changes;
 }
 
 function formatTime(totalSeconds) {

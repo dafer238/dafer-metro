@@ -440,6 +440,33 @@ main {
     50% { background: rgba(220, 53, 69, 0.3); }
 }
 
+@keyframes blink-delay-animation {
+    0% {
+        background: var(--light-color);
+    }
+
+    20% {
+        background: rgba(220, 53, 69, 0.12);
+    }
+
+    100% {
+        background: var(--light-color);
+    }
+}
+
+@keyframes blink-early-animation {
+    0% {
+        background: var(--light-color);
+    }
+
+    20% {
+        background: rgba(40, 167, 69, 0.12);
+    }
+
+    100% {
+        background: var(--light-color);
+    }
+}
 .train-item.blink-yellow {
     animation: blink-yellow-animation 1.5s ease-in-out infinite;
 }
@@ -448,6 +475,13 @@ main {
     animation: blink-red-animation 0.8s ease-in-out infinite;
 }
 
+.train-item.blink-delay {
+    animation: blink-delay-animation 1.5s ease-out 1;
+}
+
+.train-item.blink-early {
+    animation: blink-early-animation 1.5s ease-out 1;
+}
 .train-direction {
     font-weight: 600;
     font-size: 0.95rem;
@@ -792,6 +826,14 @@ footer a:hover {
         
                 .train-item.next-train {
                     padding: 8px;
+                }
+                /* Ensure animations work on mobile */
+                .train-item.blink-delay {
+                    animation: blink-delay-animation 1.5s ease-out 1;
+                }
+        
+                .train-item.blink-early {
+                    animation: blink-early-animation 1.5s ease-out 1;
                 }
         .train-direction {
             font-size: 0.85rem;
