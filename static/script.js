@@ -754,8 +754,8 @@ function displayTrains(trains) {
             arrivalAtDestStr = arrivalAtDest.toLocaleTimeString('en-GB', {hour: '2-digit', minute: '2-digit'});
         }
         
-        // Get change status for this train (delayed, early, or none)
-        const changeStatus = trainChanges[train.direction] || 'none';
+        // Get change status for this train by index (delayed, early, or none)
+        const changeStatus = trainChanges[index] || 'none';
         const changeClass = changeStatus === 'delayed' ? 'blink-delay' : 
                            changeStatus === 'early' ? 'blink-early' : '';
         
@@ -817,26 +817,25 @@ function detectTrainChanges(currentTrains, previousData) {
         return changes;
     }
     
-    // Create a map of previous trains by direction
-    const previousMap = new Map();
-    previousData.forEach(train => {
-        previousMap.set(train.direction, new Date(train.time).getTime());
-    });
-    
-    // Compare current trains with previous ones
-    currentTrains.forEach(train => {
-        const currentTime = new Date(train.time).getTime();
-        const previousTime = previousMap.get(train.direction);
-        
-        if (previousTime) {
-            const timeDiff = currentTime - previousTime;
-            // If more than 10 seconds difference (to avoid minor fluctuations)
-            if (timeDiff > 10000) {
-                changes[train.direction] = 'delayed';
-                console.log(`Train to ${train.direction} delayed by ${Math.round(timeDiff/1000)}s`);
-            } else if (timeDiff < -10000) {
-                changes[train.direction] = 'early';
-                console.log(`Train to ${train.direction} early by ${Math.round(-timeDiff/1000)}s`);
+    // Compare trains by their position in the list
+    // This allows tracking multiple trains to the same direction
+    currentTrains.forEach((train, index) => {
+        if (index < previousData.length) {
+            const previousTrain = previousData[index];
+            const currentTime = new Date(train.time).getTime();
+            const previousTime = new Date(previousTrain.time).getTime();
+            
+            // Only compare if same direction (same train being tracked)
+            if (train.direction === previousTrain.direction) {
+                const timeDiff = currentTime - previousTime;
+                // If more than 10 seconds difference (to avoid minor fluctuations)
+                if (timeDiff > 10000) {
+                    changes[index] = 'delayed';
+                    console.log(`Train #${index} to ${train.direction} delayed by ${Math.round(timeDiff/1000)}s`);
+                } else if (timeDiff < -10000) {
+                    changes[index] = 'early';
+                    console.log(`Train #${index} to ${train.direction} early by ${Math.round(-timeDiff/1000)}s`);
+                }
             }
         }
     });
